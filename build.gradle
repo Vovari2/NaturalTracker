@@ -3,9 +3,6 @@ plugins {
     id 'com.gradleup.shadow' version '8.3.5'
 }
 
-group = 'me.vovari2'
-version = '1.0.0'
-
 repositories {
     mavenCentral()
 }
@@ -13,6 +10,35 @@ repositories {
 dependencies {
     implementation project(":api")
     implementation project(":core")
+}
+
+allprojects {
+    group = 'me.vovari2.naturaltracker'
+    version = '1.0.0'
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven-publish'
+
+    sourceCompatibility = 1.8 // java 8
+    targetCompatibility = 1.8
+
+    java {
+        withSourcesJar()
+        withJavadocJar()
+    }
+
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                groupId project.group
+                artifactId project.name
+                version project.version
+                from components.java
+            }
+        }
+    }
 }
 
 shadowJar {
