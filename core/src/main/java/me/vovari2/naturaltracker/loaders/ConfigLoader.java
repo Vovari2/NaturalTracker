@@ -1,6 +1,6 @@
-package me.vovari2.auditron.loaders;
+package me.vovari2.naturaltracker.loaders;
 
-import me.vovari2.auditron.utils.FileUtils;
+import me.vovari2.naturaltracker.utils.FileUtils;
 
 public class ConfigLoader extends Loader{
     public static int ACTION_HOLD_TIME;

@@ -1,4 +1,4 @@
-package me.vovari2.auditron.utils;
+package me.vovari2.naturaltracker.utils;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;

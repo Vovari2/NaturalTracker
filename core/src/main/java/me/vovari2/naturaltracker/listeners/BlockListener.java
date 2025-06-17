@@ -1,6 +1,6 @@
-package me.vovari2.auditron.listeners;
+package me.vovari2.naturaltracker.listeners;
 
-import me.vovari2.auditron.Blocks;
+import me.vovari2.naturaltracker.Blocks;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;

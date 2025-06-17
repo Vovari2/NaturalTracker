@@ -1,4 +1,4 @@
-package me.vovari2.auditron.loaders;
+package me.vovari2.naturaltracker.loaders;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;

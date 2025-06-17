@@ -1,6 +1,6 @@
-package me.vovari2.auditron;
+package me.vovari2.naturaltracker;
 
-import me.vovari2.auditron.loaders.ConfigLoader;
+import me.vovari2.naturaltracker.loaders.ConfigLoader;
 import net.coreprotect.CoreProtect;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;

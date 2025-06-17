@@ -1,7 +1,7 @@
-package me.vovari2.auditron.utils;
+package me.vovari2.naturaltracker.utils;
 
-import me.vovari2.auditron.Auditron;
-import me.vovari2.auditron.Console;
+import me.vovari2.naturaltracker.NaturalTracker;
+import me.vovari2.naturaltracker.Console;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +15,7 @@ import java.nio.file.Path;
 public class FileUtils {
 
     public static File getPluginFolder(){
-        return Auditron.getInstance().getDataFolder();
+        return NaturalTracker.getInstance().getDataFolder();
     }
     private static File createPluginFolder(){
         File pluginFolder = getPluginFolder();
@@ -42,7 +42,7 @@ public class FileUtils {
         File file = new File(pluginFolder, resourcePath);
 
         if (!file.exists())
-            Auditron.getInstance().saveResource(resourcePath, false);
+            NaturalTracker.getInstance().saveResource(resourcePath, false);
     }
 
     public static String getContentFromFile(File file){

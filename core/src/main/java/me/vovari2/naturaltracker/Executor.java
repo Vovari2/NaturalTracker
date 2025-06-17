@@ -1,23 +1,23 @@
-package me.vovari2.auditron;
+package me.vovari2.naturaltracker;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.LiteralArgument;
-import me.vovari2.auditron.commands.ReloadCommand;
+import me.vovari2.naturaltracker.commands.ReloadCommand;
 
 public class Executor {
     public final static String PERMISSION = "auditron.*";
 
-    static void preInitialize(Auditron instance){
+    static void preInitialize(NaturalTracker instance){
         CommandTree commandEditor = new CommandTree("auditron");
         commandEditor.setAliases(new String[]{"audit"});
         commandEditor.then(new LiteralArgument("reload")
                 .withPermission(PERMISSION)
-                .executes(ignored->{ Auditron.getInstance().onReload(); }));
+                .executes(ignored->{ NaturalTracker.getInstance().onReload(); }));
         commandEditor.register(instance);
     }
 
-    static void initialize(Auditron instance) {
+    static void initialize(NaturalTracker instance) {
         CommandAPI.unregister("auditron");
 
         CommandTree command = new CommandTree("auditron");

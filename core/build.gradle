@@ -31,7 +31,7 @@ dependencies {
 shadowJar {
     relocate("dev.jorel.commandapi", "libs.commandapi")
     getDestinationDirectory().set(new File("D:\\Minecraft\\Servers\\Paper 1.21.4\\plugins\\"))
-    archiveFileName = "Auditron-${project.version}.jar"
+    archiveFileName = "NaturalTracker-${project.version}.jar"
 }
 
 def targetJavaVersion = 21

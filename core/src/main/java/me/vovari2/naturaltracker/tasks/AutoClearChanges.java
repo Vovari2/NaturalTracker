@@ -1,7 +1,7 @@
-package me.vovari2.auditron.tasks;
+package me.vovari2.naturaltracker.tasks;
 
-import me.vovari2.auditron.Auditron;
-import me.vovari2.auditron.Blocks;
+import me.vovari2.naturaltracker.NaturalTracker;
+import me.vovari2.naturaltracker.Blocks;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -10,7 +10,7 @@ public class AutoClearChanges extends BukkitRunnable {
 
     public static void start(){
         stop();
-        task = new AutoClearChanges().runTaskTimerAsynchronously(Auditron.getInstance(), 20L, 20L);
+        task = new AutoClearChanges().runTaskTimerAsynchronously(NaturalTracker.getInstance(), 20L, 20L);
     }
     public static void stop(){
         if (task != null && !task.isCancelled())

@@ -1,15 +1,15 @@
-package me.vovari2.auditron;
+package me.vovari2.naturaltracker;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
-import me.vovari2.auditron.listeners.BlockListener;
-import me.vovari2.auditron.loaders.ConfigLoader;
-import me.vovari2.auditron.tasks.AutoClearChanges;
+import me.vovari2.naturaltracker.listeners.BlockListener;
+import me.vovari2.naturaltracker.loaders.ConfigLoader;
+import me.vovari2.naturaltracker.tasks.AutoClearChanges;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class Auditron extends JavaPlugin {
-    private static Auditron INSTANCE;
+public final class NaturalTracker extends JavaPlugin {
+    private static NaturalTracker INSTANCE;
 
     public void onLoad(){
         INSTANCE = this;
@@ -68,7 +68,7 @@ public final class Auditron extends JavaPlugin {
         HandlerList.unregisterAll(this);
     }
 
-    public static Auditron getInstance() {
+    public static NaturalTracker getInstance() {
         return INSTANCE;
     }
 }
