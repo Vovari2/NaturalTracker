@@ -5,11 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bf933ab4-2868-411b-af0d-245c804dd68c" name="Changes" comment="Change build.gradle">
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/core/NaturalTracker.core.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/core/NaturalTracker.core.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/api/NaturalTracker.api.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/api/NaturalTracker.api.main.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/api/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/core/build.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -43,23 +41,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Gradle.NaturalTracker [:api:shadowJar].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.NaturalTracker [:core:shadowJar].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.NaturalTracker [shadowJar].executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/Minecraft/Plugins/NaturalTracker&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.24025974&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.NaturalTracker [:api:shadowJar].executor": "Run",
+    "Gradle.NaturalTracker [:core:shadowJar].executor": "Run",
+    "Gradle.NaturalTracker [compileJava].executor": "Run",
+    "Gradle.NaturalTracker [shadowJar].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/Minecraft/Plugins/NaturalTracker",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.24025974",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
-    <configuration name="NaturalTracker [shadowJar]" type="GradleRunConfiguration" factoryName="Gradle" nameIsGenerated="true">
+    <configuration name="NaturalTracker [compileJava]" type="GradleRunConfiguration" factoryName="Gradle" nameIsGenerated="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -70,7 +69,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="shadowJar" />
+            <option value="compileJava" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -123,7 +122,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750151707397</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Change build.gradle">
+      <option name="closed" value="true" />
+      <created>1750170371568</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1750170371568</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
