@@ -1,0 +1,7 @@
+name: Auditrion
+author: Vovari2
+version: '${version}'
+main: me.vovari2.auditron.Auditron
+api-version: '1.21'
+
+depend: [CoreProtect]
