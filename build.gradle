@@ -6,7 +6,6 @@ plugins {
 repositories {
     mavenCentral()
 }
-
 dependencies {
     implementation project(":api")
     implementation project(":core")
@@ -16,7 +15,6 @@ allprojects {
     group = 'me.vovari2.naturaltracker'
     version = '1.0.0'
 }
-
 subprojects {
     apply plugin: 'java'
     apply plugin: 'maven-publish'
