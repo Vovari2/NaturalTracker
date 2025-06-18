@@ -3,6 +3,7 @@ package me.vovari2.naturaltracker;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import me.vovari2.naturaltracker.listeners.BlockListener;
+import me.vovari2.naturaltracker.listeners.InspectorListener;
 import me.vovari2.naturaltracker.loaders.ConfigLoader;
 import me.vovari2.naturaltracker.tasks.AutoClearChanges;
 import org.bukkit.event.HandlerList;
@@ -63,6 +64,7 @@ public final class NaturalTracker extends JavaPlugin {
 
     private void enableListeners(){
         getServer().getPluginManager().registerEvents(new BlockListener(), this);
+        getServer().getPluginManager().registerEvents(new InspectorListener(), this);
     }
     private void disableListeners(){
         HandlerList.unregisterAll(this);

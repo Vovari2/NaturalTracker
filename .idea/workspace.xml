@@ -5,10 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bf933ab4-2868-411b-af0d-245c804dd68c" name="Changes" comment="Change build.gradle">
-      <change beforePath="$PROJECT_DIR$/.idea/modules/api/NaturalTracker.api.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/api/NaturalTracker.api.main.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/NaturalTrackerAPI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/commands/InspectorCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/listeners/InspectorListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/utils/NamespacedKeyUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/api/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/core/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/Executor.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/Executor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/NaturalTracker.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/NaturalTracker.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,6 +35,13 @@
       </state>
     </system>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -46,6 +58,7 @@
     "Gradle.NaturalTracker [:api:shadowJar].executor": "Run",
     "Gradle.NaturalTracker [:core:shadowJar].executor": "Run",
     "Gradle.NaturalTracker [compileJava].executor": "Run",
+    "Gradle.NaturalTracker [core:shadowJar].executor": "Run",
     "Gradle.NaturalTracker [shadowJar].executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
@@ -57,7 +70,12 @@
     "settings.editor.selected.configurable": "preferences.pluginManager"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="me.vovari2.naturaltracker" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Gradle.NaturalTracker [core:shadowJar]">
     <configuration name="NaturalTracker [compileJava]" type="GradleRunConfiguration" factoryName="Gradle" nameIsGenerated="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -80,6 +98,32 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
+    <configuration name="NaturalTracker [core:shadowJar]" type="GradleRunConfiguration" factoryName="Gradle" nameIsGenerated="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="core:shadowJar" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Gradle.NaturalTracker [compileJava]" />
+      <item itemvalue="Gradle.NaturalTracker [core:shadowJar]" />
+    </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -130,7 +174,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750170371568</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Change build.gradle">
+      <option name="closed" value="true" />
+      <created>1750170563545</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1750170563545</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
