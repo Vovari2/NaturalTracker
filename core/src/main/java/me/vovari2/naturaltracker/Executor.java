@@ -17,8 +17,8 @@ public class Executor {
                 .then(Commands.literal("reload").executes(ReloadCommand::executes))
                 .then(Commands.literal("inspect").executes(InspectorCommand::executes)).build();
 
-        instance.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
-            commands.registrar().register(basicCommand);
-        });
+        instance.getLifecycleManager().registerEventHandler(
+                LifecycleEvents.COMMANDS,
+                commands -> commands.registrar().register(basicCommand));
     }
 }
