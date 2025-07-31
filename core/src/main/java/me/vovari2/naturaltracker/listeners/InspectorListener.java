@@ -23,7 +23,7 @@ public class InspectorListener implements Listener {
         if (itemStack == null || itemStack.getType() != Material.SEA_LANTERN)
             return;
 
-        if (!itemStack.getItemMeta().getPersistentDataContainer().has(NamespacedKeyUtils.getCheckerBlock()))
+        if (!itemStack.getItemMeta().getPersistentDataContainer().has(NamespacedKeyUtils.getInspectorBlock()))
             return;
 
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK){

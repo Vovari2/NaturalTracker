@@ -1,35 +1,24 @@
 package me.vovari2.naturaltracker;
 
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandTree;
-import dev.jorel.commandapi.arguments.LiteralArgument;
+import com.mojang.brigadier.tree.LiteralCommandNode;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import io.papermc.paper.command.brigadier.Commands;
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import me.vovari2.naturaltracker.commands.InspectorCommand;
 import me.vovari2.naturaltracker.commands.ReloadCommand;
+import org.jetbrains.annotations.NotNull;
 
 public class Executor {
     public final static String PERMISSION = "naturaltracker.*";
 
-    static void preInitialize(NaturalTracker instance){
-        CommandTree commandEditor = new CommandTree("naturaltracker");
-        commandEditor.setAliases(new String[]{"nt"});
-        commandEditor.then(new LiteralArgument("reload")
-                .withPermission(PERMISSION)
-                .executes(ignored->{ NaturalTracker.getInstance().onReload(); }));
-        commandEditor.register(instance);
-    }
+    static void register(@NotNull NaturalTracker instance){
+        LiteralCommandNode<CommandSourceStack> basicCommand = Commands.literal("naturaltracker")
+                .requires(ctx -> ctx.getSender().hasPermission(PERMISSION))
+                .then(Commands.literal("reload").executes(ReloadCommand::executes))
+                .then(Commands.literal("inspect").executes(InspectorCommand::executes)).build();
 
-    static void initialize(NaturalTracker instance) {
-        CommandAPI.unregister("naturaltracker");
-
-        CommandTree command = new CommandTree("naturaltracker");
-        command.setAliases(new String[]{"nt"});
-        command.then(new LiteralArgument("reload")
-                .withPermission(PERMISSION)
-                .executes(ReloadCommand::executes));
-        command.then(new LiteralArgument("inspect")
-                .withPermission(PERMISSION)
-                .executesPlayer(InspectorCommand::executes));
-
-        command.register(instance);
+        instance.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
+            commands.registrar().register(basicCommand);
+        });
     }
 }

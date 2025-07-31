@@ -4,7 +4,7 @@ import org.bukkit.NamespacedKey;
 
 public class NamespacedKeyUtils {
     private static final String pluginNamespacedKey = "natural_tracker";
-    public static NamespacedKey getCheckerBlock(){
+    public static NamespacedKey getInspectorBlock(){
         return NamespacedKey.fromString(pluginNamespacedKey + ".inspector");
     }
 }

@@ -1,6 +1,6 @@
 package me.vovari2.naturaltracker;
 
-import me.vovari2.naturaltracker.loaders.ConfigLoader;
+import me.vovari2.naturaltracker.tasks.Timer;
 import net.coreprotect.CoreProtect;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +10,18 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Blocks {
-    private static final List<BlockChange> blocks = new LinkedList<>();
+    private static Timer autoCleanerChanges;
+    private static List<BlockChange> blocks;
+
+    public static void enable(){
+        blocks = new LinkedList<>();
+        autoCleanerChanges = Timer.period(0, 200, Blocks::clearOldChanges);
+
+    }
+    public static void disable(){
+        if(autoCleanerChanges != null && !autoCleanerChanges.task().isCancelled())
+            autoCleanerChanges.task().cancel();
+    }
 
     public static boolean wasGenerated(@NotNull final Location location){
         BlockChange change = get(location);
@@ -18,7 +29,7 @@ public class Blocks {
             return change.operation;
         return wasDestroyedInCoreProtect(location);
     }
-    public static boolean wasDestroyedInCoreProtect(@NotNull final Location location){
+    private static boolean wasDestroyedInCoreProtect(@NotNull final Location location){
         List<String[]> list = CoreProtect.getInstance().getAPI().blockLookup(location.getBlock(), (int) System.currentTimeMillis() / 1000);
         if (list.isEmpty())
             return true;
@@ -27,13 +38,13 @@ public class Blocks {
 
     public static void logPlace(@NotNull final Location location){
         blocks.removeIf(block -> block.equals(location));
-        blocks.add(new BlockChange(location.getBlockX(), location.getBlockY(), location.getBlockZ(), (int) System.currentTimeMillis() / 1000 + ConfigLoader.ACTION_HOLD_TIME, false));
+        blocks.add(new BlockChange(location.getBlockX(), location.getBlockY(), location.getBlockZ(), (int) System.currentTimeMillis() / 1000 + NaturalTracker.AUTO_HOLD_TIME, false));
     }
     public static void logDestroy(@NotNull final  Location location){
         blocks.removeIf(block -> block.equals(location));
-        blocks.add(new BlockChange(location.getBlockX(), location.getBlockY(), location.getBlockZ(), (int) System.currentTimeMillis() / 1000 + ConfigLoader.ACTION_HOLD_TIME, true));
+        blocks.add(new BlockChange(location.getBlockX(), location.getBlockY(), location.getBlockZ(), (int) System.currentTimeMillis() / 1000 + NaturalTracker.AUTO_HOLD_TIME, true));
     }
-    public static void clearOldChanges(){
+    private static void clearOldChanges(){
         int currentTime = (int)System.currentTimeMillis()/1000;
         blocks.removeIf(block -> currentTime > block.time);
     }
