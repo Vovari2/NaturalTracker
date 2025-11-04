@@ -1,7 +1,6 @@
 package me.vovari2.naturaltracker.listeners;
 
 import me.vovari2.naturaltracker.Blocks;
-import me.vovari2.naturaltracker.Console;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
