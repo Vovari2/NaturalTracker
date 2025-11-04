@@ -4,7 +4,7 @@ plugins {
 
 allprojects {
     group = 'me.vovari2.naturaltracker'
-    version = '1.0.8'
+    version = '1.0.9'
 }
 
 def targetJavaVersion = 21
