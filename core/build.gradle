@@ -25,7 +25,7 @@ dependencies {
 }
 
 shadowJar {
-    getDestinationDirectory().set(new File("D:\\Minecraft\\Servers\\Paper 1.21.7\\plugins\\"))
+    getDestinationDirectory().set(new File("D:\\Minecraft\\Servers\\Paper 1.21.8\\plugins\\"))
     archiveFileName = "NaturalTracker-${project.version}.jar"
 }
 

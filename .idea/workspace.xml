@@ -4,22 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bf933ab4-2868-411b-af0d-245c804dd68c" name="Changes" comment="Version update to 1.21.7">
-      <change afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/tasks/Timer.java" afterDir="false" />
+    <list default="true" id="bf933ab4-2868-411b-af0d-245c804dd68c" name="Changes" comment="Warning fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/core/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/Blocks.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/Blocks.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/Executor.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/Executor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/NaturalTracker.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/NaturalTracker.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/commands/InspectorCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/commands/InspectorCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/commands/ReloadCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/commands/ReloadCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/listeners/InspectorListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/listeners/InspectorListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/loaders/ConfigLoader.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/loaders/Loader.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/tasks/AutoClearChanges.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/utils/FileUtils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/utils/NamespacedKeyUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/utils/NamespacedKeyUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/resources/config.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/listeners/BlockListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/listeners/BlockListener.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,6 +40,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GithubDefaultAccount">
+    <option name="defaultAccountId" value="92c6887e-3595-4fb5-90b8-bd8b78b1f6f7" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
 }</component>
@@ -59,23 +51,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Gradle.NaturalTracker [:api:shadowJar].executor": "Run",
-    "Gradle.NaturalTracker [:core:shadowJar].executor": "Run",
-    "Gradle.NaturalTracker [compileJava].executor": "Run",
-    "Gradle.NaturalTracker [core:shadowJar].executor": "Run",
-    "Gradle.NaturalTracker [shadowJar].executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/Minecraft/Plugins/NaturalTracker",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.24025974",
-    "settings.editor.selected.configurable": "Errors"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Gradle.Build NaturalTracker.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.NaturalTracker [:api:shadowJar].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.NaturalTracker [:core:shadowJar].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.NaturalTracker [compileJava].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.NaturalTracker [core:shadowJar].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.NaturalTracker [shadowJar].executor&quot;: &quot;Run&quot;,
+    &quot;Remote JVM Debug.Paper Remote Debug.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Minecraft/Plugins/NaturalTracker&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.24025974&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="me.vovari2.naturaltracker.tasks" />
@@ -127,9 +121,24 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
+    <configuration name="Paper Remote Debug" type="Remote">
+      <module name="NaturalTracker" />
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+      <option name="AUTO_RESTART" value="false" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="5005" />
+        <option name="LOCAL" value="false" />
+      </RunnerSettings>
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Gradle.NaturalTracker [compileJava]" />
       <item itemvalue="Gradle.NaturalTracker [core:shadowJar]" />
+      <item itemvalue="Remote JVM Debug.Paper Remote Debug" />
     </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -229,8 +238,35 @@
       <option name="project" value="LOCAL" />
       <updated>1751469377730</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Updating to new code style">
+      <option name="closed" value="true" />
+      <created>1753990432869</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1753990432869</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Warning fix">
+      <option name="closed" value="true" />
+      <created>1753990466437</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1753990466437</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Rename project" />
@@ -239,6 +275,34 @@
     <MESSAGE value="Changes" />
     <MESSAGE value="Change build.gradle" />
     <MESSAGE value="Version update to 1.21.7" />
-    <option name="LAST_COMMIT_MESSAGE" value="Version update to 1.21.7" />
+    <MESSAGE value="Updating to new code style" />
+    <MESSAGE value="Warning fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="Warning fix" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/Blocks.java</url>
+          <line>29</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/Blocks.java</url>
+          <line>27</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/Blocks.java</url>
+          <line>28</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/Blocks.java</url>
+          <line>26</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
