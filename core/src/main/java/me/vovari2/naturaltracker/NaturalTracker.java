@@ -3,11 +3,10 @@ package me.vovari2.naturaltracker;
 import me.vovari2.naturaltracker.changes.ChangesCache;
 import me.vovari2.naturaltracker.listeners.BlockListener;
 import me.vovari2.naturaltracker.listeners.InspectorListener;
+import me.vovari2.naturaltracker.settings.Settings;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.Locale;
 
 public final class NaturalTracker extends JavaPlugin {
     private static NaturalTracker INSTANCE;
@@ -21,8 +20,9 @@ public final class NaturalTracker extends JavaPlugin {
 
         INSTANCE = this;
         Console.LOGGER = getComponentLogger();
-        Executor.register(this);
+        Settings.enable();
 
+        Executor.register(this);
         ChangesCache.enable();
         registerListeners();
 

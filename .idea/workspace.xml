@@ -4,32 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bf933ab4-2868-411b-af0d-245c804dd68c" name="Changes" comment="Update to version 1.21.10">
-      <change afterPath="$PROJECT_DIR$/.idea/NaturalTracker.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/discord.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/changes/ChangesCache.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/changes/SerialWorker.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/settings/Loader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/settings/Settings.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/utils/FileUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/src/main/resources/settings.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/core/NaturalTracker.core.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/core/NaturalTracker.core.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/api/build.gradle" afterDir="false" />
+    <list default="true" id="bf933ab4-2868-411b-af0d-245c804dd68c" name="Changes" comment="Optimization">
       <change beforePath="$PROJECT_DIR$/api/src/main/java/me/vovari2/naturaltracker/NaturalTrackerAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/me/vovari2/naturaltracker/NaturalTrackerAPI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/core/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/Blocks.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/Console.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/Console.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/NaturalTracker.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/NaturalTracker.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/NaturalTrackerAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/NaturalTrackerAPI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/listeners/BlockListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/listeners/BlockListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/listeners/InspectorListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/listeners/InspectorListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/tasks/Timer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,6 +45,9 @@
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
@@ -374,6 +355,7 @@
     <MESSAGE value="Version update" />
     <MESSAGE value="Warning fix" />
     <MESSAGE value="Update to version 1.21.10" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update to version 1.21.10" />
+    <MESSAGE value="Optimization" />
+    <option name="LAST_COMMIT_MESSAGE" value="Optimization" />
   </component>
 </project>
