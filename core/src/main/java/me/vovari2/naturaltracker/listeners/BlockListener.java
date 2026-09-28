@@ -1,6 +1,6 @@
 package me.vovari2.naturaltracker.listeners;
 
-import me.vovari2.naturaltracker.Blocks;
+import me.vovari2.naturaltracker.changes.ChangesCache;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
@@ -16,14 +16,14 @@ public class BlockListener implements Listener {
     public void onPlayerPlaceBlock(BlockPlaceEvent event){
         if (event.isCancelled())
             return;
-        Blocks.logPlace(event.getBlock().getLocation());
+        ChangesCache.log(event.getBlock().getLocation());
     }
     @EventHandler(priority=EventPriority.MONITOR)
     public void onPlayerBreakBlock(BlockBreakEvent event){
         if (event.isCancelled())
             return;
 
-        Blocks.logDestroy(event.getBlock().getLocation());
+        ChangesCache.log(event.getBlock().getLocation());
     }
     @EventHandler(priority=EventPriority.MONITOR)
     public void onPistonExtend(BlockPistonExtendEvent event){
@@ -33,8 +33,8 @@ public class BlockListener implements Listener {
         BlockFace face = event.getDirection();
         for (int i = event.getBlocks().size() - 1; i >= 0; i--){
             Location location = event.getBlocks().get(i).getLocation();
-            Blocks.logDestroy(location);
-            Blocks.logPlace(location.clone().add(face.getModX(), face.getModY(), face.getModZ()));
+            ChangesCache.log(location);
+            ChangesCache.log(location.clone().add(face.getModX(), face.getModY(), face.getModZ()));
         }
     }
     @EventHandler(priority=EventPriority.MONITOR)
@@ -42,8 +42,8 @@ public class BlockListener implements Listener {
         BlockFace face = event.getDirection();
         for (int i = event.getBlocks().size() - 1; i >= 0; i--){
             Location location = event.getBlocks().get(i).getLocation();
-            Blocks.logDestroy(location);
-            Blocks.logPlace(location.clone().add(face.getModX(), face.getModY(), face.getModZ()));
+            ChangesCache.log(location);
+            ChangesCache.log(location.clone().add(face.getModX(), face.getModY(), face.getModZ()));
         }
     }
 }

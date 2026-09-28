@@ -1,7 +1,7 @@
 package me.vovari2.naturaltracker.listeners;
 
-import me.vovari2.naturaltracker.Blocks;
-import me.vovari2.naturaltracker.utils.NamespacedKeyUtils;
+import me.vovari2.naturaltracker.NaturalTracker;
+import me.vovari2.naturaltracker.changes.ChangesCache;
 import me.vovari2.naturaltracker.utils.TextUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -23,7 +23,7 @@ public class InspectorListener implements Listener {
         if (itemStack == null || itemStack.getType() != Material.SEA_LANTERN)
             return;
 
-        if (!itemStack.getItemMeta().getPersistentDataContainer().has(NamespacedKeyUtils.getInspectorBlock()))
+        if (!itemStack.getItemMeta().getPersistentDataContainer().has(NaturalTracker.getInspectorNamespacedKey()))
             return;
 
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK){
@@ -31,8 +31,8 @@ public class InspectorListener implements Listener {
             block = block.getWorld().getBlockAt(block.getLocation().clone().add(face.getModX(), face.getModY(), face.getModZ()));
         }
 
-        boolean wasGenerated = Blocks.wasGenerated(block.getLocation());
-        event.getPlayer().sendMessage(TextUtils.toComponent(wasGenerated ? "<green>The block was generated!" : "<red>The block was not generated!"));
+        boolean wasGenerated = !ChangesCache.has(block.getLocation());
+        event.getPlayer().sendMessage(TextUtils.toComponent(wasGenerated ? "<green>Блок был сгенерирован!" : "<red>Блок не был сгенерирован!"));
         event.setCancelled(true);
     }
 }

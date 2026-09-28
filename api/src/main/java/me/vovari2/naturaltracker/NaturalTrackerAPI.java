@@ -4,6 +4,6 @@ import org.bukkit.Location;
 
 public interface NaturalTrackerAPI {
     static boolean wasGenerated(Location location){
-        return Blocks.wasGenerated(location);
+        return BlocksCache.wasGenerated(location);
     }
 }

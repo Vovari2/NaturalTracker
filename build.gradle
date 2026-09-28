@@ -7,7 +7,7 @@ allprojects {
     version = '1.0.9'
 }
 
-def targetJavaVersion = 21
+def targetJavaVersion = 17
 subprojects {
     apply plugin: 'java'
 

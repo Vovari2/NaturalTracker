@@ -1,41 +1,50 @@
 package me.vovari2.naturaltracker;
 
+import me.vovari2.naturaltracker.changes.ChangesCache;
 import me.vovari2.naturaltracker.listeners.BlockListener;
 import me.vovari2.naturaltracker.listeners.InspectorListener;
+import org.bukkit.NamespacedKey;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Locale;
+
 public final class NaturalTracker extends JavaPlugin {
     private static NaturalTracker INSTANCE;
-    public static final int AUTO_HOLD_TIME = 20;
 
-    public void onLoad(){
-        INSTANCE = this;
-        Console.LOGGER = getComponentLogger();
-    }
+    private final NamespacedKey INSPECTOR_NAMESPACED_KEY = new NamespacedKey("natural_traker", "inspector");
+    private String PLUGIN_NAME;
+    private String VERSION;
 
     public void onEnable() {
-        long enableTime = System.currentTimeMillis();
+        long time = System.currentTimeMillis();
 
+        INSTANCE = this;
+        Console.LOGGER = getComponentLogger();
         Executor.register(this);
-        Blocks.enable();
+
+        ChangesCache.enable();
         registerListeners();
 
-        Console.info("<green>Plugin {} {} enabled! ({} ms)", INSTANCE.getName(), INSTANCE.getPluginMeta().getVersion(), System.currentTimeMillis() - enableTime);
+        Console.info("<green>Плагин %s %s включён! (%d ms)".formatted(PLUGIN_NAME, VERSION, System.currentTimeMillis() - time));
     }
 
     public void onDisable() {
-        Blocks.disable();
+        ChangesCache.disable();
         unregisterListeners();
 
-        Console.info("<red>Plugin {} {} disabled!", INSTANCE.getName(), INSTANCE.getPluginMeta().getVersion());
+        Console.info("<red>Плагин %s %s выключен!".formatted(PLUGIN_NAME, VERSION));
     }
 
-    public void onReload(){
+    public long onReload(){
+        long time = System.currentTimeMillis();
+
+        ChangesCache.reload();
         unregisterListeners();
         registerListeners();
 
-        Console.info("<dark_green>Plugin {} {} reloaded!", INSTANCE.getName(), INSTANCE.getPluginMeta().getVersion());
+        Console.info("<green>Плагин %s %s перезагружен! (%d ms)".formatted(PLUGIN_NAME, VERSION, System.currentTimeMillis() - time));
+        return System.currentTimeMillis() - time;
     }
 
     private void registerListeners(){
@@ -48,5 +57,8 @@ public final class NaturalTracker extends JavaPlugin {
 
     public static NaturalTracker getInstance() {
         return INSTANCE;
+    }
+    public static NamespacedKey getInspectorNamespacedKey() {
+        return INSTANCE.INSPECTOR_NAMESPACED_KEY;
     }
 }

@@ -4,11 +4,40 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bf933ab4-2868-411b-af0d-245c804dd68c" name="Changes" comment="Warning fix" />
+    <list default="true" id="bf933ab4-2868-411b-af0d-245c804dd68c" name="Changes" comment="Update to version 1.21.10">
+      <change afterPath="$PROJECT_DIR$/.idea/NaturalTracker.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/discord.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/changes/ChangesCache.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/changes/SerialWorker.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/settings/Loader.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/settings/Settings.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/utils/FileUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/src/main/resources/settings.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/core/NaturalTracker.core.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/core/NaturalTracker.core.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/api/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/java/me/vovari2/naturaltracker/NaturalTrackerAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/me/vovari2/naturaltracker/NaturalTrackerAPI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/core/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/Blocks.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/Console.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/Console.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/NaturalTracker.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/NaturalTracker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/NaturalTrackerAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/NaturalTrackerAPI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/listeners/BlockListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/listeners/BlockListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/listeners/InspectorListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/listeners/InspectorListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/tasks/Timer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/resources/plugin.yml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="33" />
   </component>
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
@@ -35,34 +64,58 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
 }</component>
   <component name="ProjectId" id="2yd2SdZD6g9OHxiEruL3zZhBLI0" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Gradle.Build NaturalTracker.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.NaturalTracker [:api:shadowJar].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.NaturalTracker [:core:shadowJar].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.NaturalTracker [compileJava].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.NaturalTracker [core:shadowJar].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.NaturalTracker [shadowJar].executor&quot;: &quot;Run&quot;,
-    &quot;Remote JVM Debug.Paper Remote Debug.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/Minecraft/Plugins/NaturalTracker&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.24025974&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.Build NaturalTracker.executor": "Run",
+    "Gradle.NaturalTracker [:api:shadowJar].executor": "Run",
+    "Gradle.NaturalTracker [:core:shadowJar].executor": "Run",
+    "Gradle.NaturalTracker [compileJava].executor": "Run",
+    "Gradle.NaturalTracker [core:shadowJar].executor": "Run",
+    "Gradle.NaturalTracker [shadowJar].executor": "Run",
+    "Remote JVM Debug.Paper Remote Debug.executor": "Debug",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/Minecraft/Plugins/NaturalTracker/core/src/main/resources",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.jshint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.jshint": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.24025974",
+    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Minecraft\Plugins\NaturalTracker\core\src\main\resources" />
+      <recent name="D:\Minecraft\Plugins\NaturalTracker\core\src\main\java\me\vovari2\naturaltracker" />
+      <recent name="D:\Minecraft\Plugins\NaturalTracker\core\src\main\java\me\vovari2\naturaltracker\utils" />
+    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="me.vovari2.naturaltracker.tasks" />
       <recent name="me.vovari2.naturaltracker" />
@@ -87,8 +140,11 @@
       </ExternalSystemSettings>
       <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <ExternalSystemDebugDisabled>false</ExternalSystemDebugDisabled>
       <DebugAllEnabled>false</DebugAllEnabled>
       <RunAsTest>false</RunAsTest>
+      <GradleProfilingDisabled>false</GradleProfilingDisabled>
+      <GradleCoverageDisabled>false</GradleCoverageDisabled>
       <method v="2" />
     </configuration>
     <configuration name="NaturalTracker [core:shadowJar]" type="GradleRunConfiguration" factoryName="Gradle" nameIsGenerated="true">
@@ -109,8 +165,11 @@
       </ExternalSystemSettings>
       <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <ExternalSystemDebugDisabled>false</ExternalSystemDebugDisabled>
       <DebugAllEnabled>false</DebugAllEnabled>
       <RunAsTest>false</RunAsTest>
+      <GradleProfilingDisabled>false</GradleProfilingDisabled>
+      <GradleCoverageDisabled>false</GradleCoverageDisabled>
       <method v="2" />
     </configuration>
     <configuration name="Paper Remote Debug" type="Remote">
@@ -132,6 +191,14 @@
       <item itemvalue="Gradle.NaturalTracker [core:shadowJar]" />
       <item itemvalue="Remote JVM Debug.Paper Remote Debug" />
     </list>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-34e2839f716b-intellij.indexing.shared.core-IU-262.9437.185" />
+        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-IU-262.9437.185" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -270,8 +337,19 @@
       <option name="project" value="LOCAL" />
       <updated>1762259588499</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Update to version 1.21.10">
+      <option name="closed" value="true" />
+      <created>1764168038329</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1764168038329</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -295,32 +373,7 @@
     <MESSAGE value="Bug fix" />
     <MESSAGE value="Version update" />
     <MESSAGE value="Warning fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="Warning fix" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/Blocks.java</url>
-          <line>29</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/Blocks.java</url>
-          <line>27</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/Blocks.java</url>
-          <line>28</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/Blocks.java</url>
-          <line>26</line>
-          <option name="timeStamp" value="13" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Update to version 1.21.10" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update to version 1.21.10" />
   </component>
 </project>
