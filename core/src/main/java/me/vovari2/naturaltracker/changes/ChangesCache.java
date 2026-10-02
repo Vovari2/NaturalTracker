@@ -1,6 +1,7 @@
 package me.vovari2.naturaltracker.changes;
 
 import me.vovari2.naturaltracker.Console;
+import me.vovari2.naturaltracker.Database;
 import me.vovari2.naturaltracker.settings.Settings;
 import org.bukkit.Location;
 
@@ -11,12 +12,12 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class ChangesCache {
     private volatile static ChangesCache IMP;
 
-    private final ConcurrentHashMap<Key, Boolean> map = new ConcurrentHashMap<>();
-    private final ConcurrentLinkedQueue<Key> queue = new ConcurrentLinkedQueue<>();
+    private final ConcurrentHashMap<Position, Boolean> map = new ConcurrentHashMap<>();
+    private final ConcurrentLinkedQueue<Position> queue = new ConcurrentLinkedQueue<>();
     private final SerialWorker worker;
 
-    private volatile int size;
-    private volatile int maxSize;
+    private int size;
+    private int maxSize;
     private int currentSize;
 
     public ChangesCache(int size, int buffer) {
@@ -25,20 +26,23 @@ public class ChangesCache {
         this.worker = new SerialWorker("natural-tracker-worker", 1_000, t -> Console.error("Не получилось обработать задачу в очереди задач!", t));
     }
 
-    private void doAdd(Key key) {
-        if (map.putIfAbsent(key, Boolean.TRUE) == null) {
-            queue.add(key);
+    private void doAdd(Position position) {
+        if (map.putIfAbsent(position, Boolean.TRUE) == null) {
+            queue.add(position);
             currentSize++;
             if (currentSize > maxSize) doEvict();
         }
     }
     private void doReload(int newSize, int newBuffer) {
+        // Пересоздание пула соединений с БД
+        Database.reload();
+
         this.size = newSize;
         this.maxSize = newSize + newBuffer;
         if (currentSize > newSize) doEvict();
     }
     private void doEvict() {
-        Key k;
+        Position k;
         while (currentSize > size && (k = queue.poll()) != null) {
             map.remove(k);
             currentSize--;
@@ -52,19 +56,33 @@ public class ChangesCache {
             return;
         }
 
-        Key key = Key.of(location);
-        c.worker.execute(() -> c.doAdd(key));
+        Position position = Position.of(location);
+        c.worker.execute(() -> c.doAdd(position));
     }
     public static boolean has(Location location) {
         ChangesCache c = IMP;
         if (c == null) return false;
-        return c.map.containsKey(Key.of(location));
+
+        Position pos = Position.of(location);
+        boolean exists = c.map.containsKey(pos);
+
+        c.worker.execute(() -> {
+            Database.CheckResult result = Database.checkOrInsertPosition(pos.toString());
+            if (result == Database.CheckResult.EXISTS)
+                c.map.put(pos, Boolean.TRUE);
+
+            // NOT_EXISTS — не кладём, пусть следующий has снова спросит БД
+            // DB_UNAVAILABLE — не кладём, попробуем позже
+        });
+
+        return exists;
     }
 
     public static synchronized void enable() {
         if (IMP != null)
             IMP.worker.close();
 
+        Database.enable();
         IMP = new ChangesCache(Settings.CHANGES.MAX_SIZE, Settings.CHANGES.BUFFER);
     }
     public static void reload() {
@@ -82,13 +100,17 @@ public class ChangesCache {
     public static void disable(){
         ChangesCache c = IMP;
         if (c == null) return;
+
         IMP = null;
         c.worker.close();
+
+        // Закрытие пула соединений с БД
+        Database.disable();
     }
 
-    private record Key(UUID world, int x, int y, int z){
-        static Key of(Location loc){
-            return new Key(loc.getWorld().getUID(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+    public record Position(UUID world, int x, int y, int z){
+        static Position of(Location loc){
+            return new Position(loc.getWorld().getUID(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
         }
     }
 }

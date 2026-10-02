@@ -32,8 +32,14 @@ public final class SerialWorker implements AutoCloseable {
         task.run();
     }
     public void close() {
+        if (!running) return;
         running = false;
         thread.interrupt();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
     private void processLoop() {
         while (running) {

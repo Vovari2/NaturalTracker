@@ -4,10 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bf933ab4-2868-411b-af0d-245c804dd68c" name="Changes" comment="Optimization">
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/me/vovari2/naturaltracker/NaturalTrackerAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/me/vovari2/naturaltracker/NaturalTrackerAPI.java" afterDir="false" />
+    <list default="true" id="bf933ab4-2868-411b-af0d-245c804dd68c" name="Changes" comment="Warning fix">
+      <change afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/Database.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/DatabaseType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/core/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/NaturalTracker.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/NaturalTracker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/changes/ChangesCache.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/changes/ChangesCache.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/changes/SerialWorker.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/changes/SerialWorker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/settings/Loader.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/settings/Loader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/settings/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/settings/Settings.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,7 +82,7 @@
     "codeWithMe.voiceChat.enabledByDefault": "false",
     "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/Minecraft/Plugins/NaturalTracker/core/src/main/resources",
+    "last_opened_file_path": "D:/Minecraft/Plugins/NaturalTracker/core/src/main/java/me/vovari2/naturaltracker",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.jshint": "true",
     "node.js.detected.package.tslint": "true",
@@ -93,9 +98,9 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\Minecraft\Plugins\NaturalTracker\core\src\main\resources" />
       <recent name="D:\Minecraft\Plugins\NaturalTracker\core\src\main\java\me\vovari2\naturaltracker" />
       <recent name="D:\Minecraft\Plugins\NaturalTracker\core\src\main\java\me\vovari2\naturaltracker\utils" />
+      <recent name="D:\Minecraft\Plugins\NaturalTracker\core\src\main\resources" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="me.vovari2.naturaltracker.tasks" />
@@ -353,9 +358,9 @@
     <MESSAGE value="Updating to new code style" />
     <MESSAGE value="Bug fix" />
     <MESSAGE value="Version update" />
-    <MESSAGE value="Warning fix" />
     <MESSAGE value="Update to version 1.21.10" />
     <MESSAGE value="Optimization" />
-    <option name="LAST_COMMIT_MESSAGE" value="Optimization" />
+    <MESSAGE value="Warning fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="Warning fix" />
   </component>
 </project>
