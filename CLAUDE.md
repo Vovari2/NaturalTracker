@@ -47,7 +47,7 @@ PDC-ключ предмета-инспектора — `NaturalTracker.getInspec
 - **Именование**: статические поля и константы — `UPPER_SNAKE_CASE` (даже не final: `DATA_SOURCE`, `BUFFER`); поля экземпляра — `camelCase`. В `Settings` вложенные классы тоже капсом (`Settings.DATABASE.POOL.MAX_SIZE`).
 - Отступ 4 пробела, открывающая скобка на той же строке, часто без пробела перед ней: `public void foo(){`.
 - Однострочные `if` без фигурных скобок, ранний `return`:
-  ```java
+  ```
   if (event.isCancelled())
       return;
   ```
