@@ -20,6 +20,7 @@ dependencies {
 
     implementation("io.agroal:agroal-api:3.2.1") // Agroal (29.08.26)
     implementation("io.agroal:agroal-pool:3.2.1")
+    implementation("org.postgresql:postgresql:42.7.5") // PostgreSQL JDBC (Paper его не содержит)
 }
 
 shadowJar {

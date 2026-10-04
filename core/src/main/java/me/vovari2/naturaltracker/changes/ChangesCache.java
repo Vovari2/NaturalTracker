@@ -5,7 +5,6 @@ import me.vovari2.naturaltracker.Database;
 import me.vovari2.naturaltracker.settings.Settings;
 import org.bukkit.Location;
 
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -67,7 +66,7 @@ public class ChangesCache {
         boolean exists = c.map.containsKey(pos);
 
         c.worker.execute(() -> {
-            Database.CheckResult result = Database.checkOrInsertPosition(pos.toString());
+            Database.CheckResult result = Database.checkOrInsertPosition(pos);
             if (result == Database.CheckResult.EXISTS)
                 c.map.put(pos, Boolean.TRUE);
 
@@ -106,11 +105,5 @@ public class ChangesCache {
 
         // Закрытие пула соединений с БД
         Database.disable();
-    }
-
-    public record Position(UUID world, int x, int y, int z){
-        static Position of(Location loc){
-            return new Position(loc.getWorld().getUID(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
-        }
     }
 }

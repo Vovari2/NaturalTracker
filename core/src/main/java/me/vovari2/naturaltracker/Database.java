@@ -6,6 +6,7 @@ import io.agroal.api.configuration.AgroalDataSourceConfiguration;
 import io.agroal.api.configuration.supplier.AgroalDataSourceConfigurationSupplier;
 import io.agroal.api.security.NamePrincipal;
 import io.agroal.api.security.SimplePassword;
+import me.vovari2.naturaltracker.changes.Position;
 import me.vovari2.naturaltracker.settings.Settings;
 
 import java.sql.*;
@@ -16,8 +17,9 @@ import java.util.*;
 public class Database {
     private static AgroalDataSource DATA_SOURCE;
 
-    private static final Set<String> BUFFER = new HashSet<>();
-    private static volatile int BUFFER_SIZE = 100;
+    private static final Set<Position> BUFFER = new HashSet<>();
+    private static volatile int BUFFER_SIZE;
+    private static volatile int DATABASE_SIZE;
 
     public static void enable() {
         initialize();
@@ -47,7 +49,8 @@ public class Database {
     }
 
     private static void initialize(){
-        BUFFER_SIZE = Settings.DATABASE.BUFFER;
+        BUFFER_SIZE = Settings.DATABASE.BUFFER_SIZE;
+        DATABASE_SIZE = Settings.DATABASE.SIZE;
 
         DatabaseType type = Settings.DATABASE.TYPE;
         AgroalDataSourceConfigurationSupplier configuration = new AgroalDataSourceConfigurationSupplier()
@@ -95,7 +98,7 @@ public class Database {
         }
     }
 
-    public static CheckResult checkOrInsertPosition(String pos){
+    public static CheckResult checkOrInsertPosition(Position pos){
         if (DATA_SOURCE == null)
             return CheckResult.DB_UNAVAILABLE;
 
@@ -109,16 +112,16 @@ public class Database {
 
             return CheckResult.NOT_EXISTS;
         } catch (SQLException e) {
-            Console.error("Не получилось подключиться к БД!", e);
+            Console.error("Не получилось обработать позицию в БД!", e);
             return CheckResult.DB_UNAVAILABLE;
         }
     }
 
-    private static boolean existsInDatabase(Connection conn, String pos) throws SQLException {
+    private static boolean existsInDatabase(Connection conn, Position pos) throws SQLException {
         String query = Settings.DATABASE.TYPE.querySelect();
         try (PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setQueryTimeout(Settings.DATABASE.TIMEOUT);
-            ps.setString(1, pos);
+            setPositionParams(ps, pos);
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next();
             }
@@ -129,19 +132,19 @@ public class Database {
 
         // Делаем снимок и очищаем буфер до записи.
         // Если insertBatch упадёт — данные потеряются. Это осознанное решение: позиции перезапишутся при следующем has для тех же блоков.
-        Set<String> snapshot = new HashSet<>(BUFFER);
+        Set<Position> snapshot = new HashSet<>(BUFFER);
         BUFFER.clear();
 
         insertBatch(conn, snapshot);
     }
-    private static void insertBatch(Connection conn, Set<String> batch) {
+    private static void insertBatch(Connection conn, Set<Position> batch) {
         if (batch.isEmpty()) return;
 
         String query = Settings.DATABASE.TYPE.queryInsert();
         try (PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setQueryTimeout(Settings.DATABASE.TIMEOUT);
-            for (String pos : batch) {
-                ps.setString(1, pos);
+            for (Position pos : batch) {
+                setPositionParams(ps, pos);
                 ps.addBatch();
             }
             ps.executeBatch();
@@ -149,6 +152,40 @@ public class Database {
         } catch (SQLException e) {
             Console.error("Не получилось записать %s позиций в БД!".formatted(batch.size()), e);
         }
+
+        enforceSizeLimit(conn);
     }
+    private static void enforceSizeLimit(Connection conn) {
+        String countQuery = Settings.DATABASE.TYPE.queryCount();
+        String deleteQuery = Settings.DATABASE.TYPE.queryDeleteOldest();
+
+        try {
+            int count;
+            try (PreparedStatement ps = conn.prepareStatement(countQuery);
+                 ResultSet rs = ps.executeQuery()) {
+                rs.next();
+                count = rs.getInt(1);
+            }
+
+            int excess = count - DATABASE_SIZE;
+            if (excess <= 0) return;
+
+            try (PreparedStatement ps = conn.prepareStatement(deleteQuery)) {
+                ps.setQueryTimeout(Settings.DATABASE.TIMEOUT);
+                ps.setInt(1, excess);
+                ps.executeUpdate();
+            }
+        } catch (SQLException e) {
+            Console.error("Не получилось подрезать таблицу до %d записей!".formatted(DATABASE_SIZE), e);
+        }
+    }
+
+    private static void setPositionParams(PreparedStatement ps, Position pos) throws SQLException {
+        ps.setBytes(1, pos.world());
+        ps.setInt(2, pos.x());
+        ps.setInt(3, pos.y());
+        ps.setInt(4, pos.z());
+    }
+
     public enum CheckResult { EXISTS, NOT_EXISTS, DB_UNAVAILABLE }
 }

@@ -21,10 +21,12 @@ final class Loader {
         Settings.CHANGES.BUFFER = config.getInt("changes.buffer", 10_000);
 
         Settings.DATABASE.TYPE = parseDatabaseType("database.type", DatabaseType.SQLITE);
-        Settings.DATABASE.URL = config.getString("database.url", Path.of(NaturalTracker.getInstance().getDataFolder().toString(), "data.db").toString());
+        Settings.DATABASE.URL = parseDatabaseUrl("database.url");
         Settings.DATABASE.USER = config.getString("database.user", "root");
         Settings.DATABASE.PASSWORD = config.getString("database.password", "");
-        Settings.DATABASE.BUFFER = config.getInt("database.buffer", 20);
+        Settings.DATABASE.SIZE = config.getInt("database.size", 5_000_000);
+        Settings.DATABASE.TIMEOUT = config.getInt("database.timeout", 10);
+        Settings.DATABASE.BUFFER_SIZE = config.getInt("database.buffer_size", 100);
 
         Settings.DATABASE.POOL.MIN_SIZE = config.getInt("database.pool.min_size", 2);
         Settings.DATABASE.POOL.MAX_SIZE = config.getInt("database.pool.max_size", 10);
@@ -38,5 +40,12 @@ final class Loader {
         if (type == null) return def;
 
         return type;
+    }
+    private @NotNull String parseDatabaseUrl(@NotNull String path){
+        @Nullable String url = config.getString(path);
+        if (url == null || url.isBlank())
+            return Path.of(NaturalTracker.getInstance().getDataFolder().toString(), "data.db").toString();
+
+        return url;
     }
 }

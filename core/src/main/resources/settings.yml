@@ -1,4 +1,26 @@
 
 changes:
-  size: 1_000_000
+  # Максимальное количество позиций в кэше в памяти
+  max_size: 1_000_000
+  # Запас сверх max_size, после которого начинается вытеснение старых позиций
   buffer: 10_000
+
+database:
+  # Тип базы данных: sqlite, mysql, postgresql
+  type: sqlite
+  # Для sqlite — путь к файлу (пусто = plugins/NaturalTracker/data.db)
+  # Для mysql/postgresql — host:port/database
+  url: ''
+  user: root
+  password: ''
+  # Максимальное количество позиций в таблице, старые удаляются
+  size: 5_000_000
+  # Таймаут запроса в секундах
+  timeout: 10
+  # Сколько позиций копить перед пакетной записью в БД
+  buffer_size: 100
+  pool:
+    min_size: 2
+    max_size: 10
+    # Таймаут получения соединения из пула в секундах
+    timeout_time: 10
