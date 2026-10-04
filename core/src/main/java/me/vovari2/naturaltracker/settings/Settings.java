@@ -23,7 +23,7 @@ public final class Settings {
         }
     }
 
-    public static void enable(){
+    public static void initialize(){
         try { new Loader(); }
         catch(Exception e){ Console.error("Не удалось загрузить настройки: %s".formatted(e.getMessage())); }
     }
