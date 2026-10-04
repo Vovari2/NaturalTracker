@@ -25,10 +25,20 @@ dependencies {
 
     implementation("io.agroal:agroal-api:3.2.1") // Agroal (29.08.26)
     implementation("io.agroal:agroal-pool:3.2.1")
-    implementation("org.postgresql:postgresql:42.7.5") // PostgreSQL JDBC (Paper его не содержит)
+
+
+
+    implementation("org.xerial:sqlite-jdbc:3.53.2.1") // SQLite (16.08.26)
+    implementation("com.mysql:mysql-connector-j:26.7.0") // MySQL (16.08.26)
+    implementation("org.postgresql:postgresql:42.7.13") // PostgreSQL (21.08.26)
 }
 
 shadowJar {
+    relocate("io.agroal", "libs.agroal")
+    relocate("org.xerial", "libs.sqlite")
+    relocate("com.mysql", "libs.mysql")
+    relocate("org.postgresql", "libs.postgresql")
+
     getDestinationDirectory().set(new File("D:\\Minecraft\\Servers\\Paper 1.20.1\\plugins\\"))
     archiveFileName = "NaturalTracker-${project.version}.jar"
 }
