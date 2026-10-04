@@ -25,7 +25,7 @@ public class NaturalTrackerCommand extends BukkitCommand {
         if (args.length < 1)
             return Messages.NOT_ENOUGH_ARGUMENTS.send(sender);
 
-        @Nullable Command command = switch(args[0]){
+        @Nullable Command command = switch(args[0].toLowerCase()){
             case "reload" -> new ReloadCommand(instance, sender);
             case "inspect" -> new InspectorCommand(instance, sender);
             default -> null;

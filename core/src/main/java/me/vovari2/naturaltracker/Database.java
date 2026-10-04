@@ -53,6 +53,11 @@ public class Database {
         DATABASE_SIZE = Settings.DATABASE.SIZE;
 
         DatabaseType type = Settings.DATABASE.TYPE;
+        String url = type.buildUrl(Settings.DATABASE.URL);
+        if (type == DatabaseType.MYSQL)
+            url += (url.contains("?") ? "&" : "?") + "useServerPrepStmts=true&cachePrepStmts=true";
+
+        final String jdbcUrl = url;
         AgroalDataSourceConfigurationSupplier configuration = new AgroalDataSourceConfigurationSupplier()
                 .dataSourceImplementation( AgroalDataSourceConfiguration.DataSourceImplementation.AGROAL )
                 .metricsEnabled( false )
@@ -60,16 +65,15 @@ public class Database {
                         .maxSize(Settings.DATABASE.POOL.MAX_SIZE)
                         .acquisitionTimeout(Duration.of(Settings.DATABASE.POOL.TIMEOUT_TIME, ChronoUnit.SECONDS))
                         .connectionFactoryConfiguration( cf -> {
-                            cf.jdbcUrl(type.buildUrl(Settings.DATABASE.URL))
+                            cf.jdbcUrl(jdbcUrl)
                                     .connectionProviderClassName(type.driverClass())
                                     .jdbcTransactionIsolation(AgroalConnectionFactoryConfiguration.TransactionIsolation.SERIALIZABLE)
                                     .principal( new NamePrincipal(Settings.DATABASE.USER) )
                                     .credential(new SimplePassword(Settings.DATABASE.PASSWORD));
 
-                            switch (type) {
-                                case SQLITE -> cf.initialSql("PRAGMA journal_mode = WAL; PRAGMA foreign_keys = ON;");
-                                case MYSQL -> cf.jdbcUrl(cf.get().jdbcUrl() + "?useServerPrepStmts=true&cachePrepStmts=true");
-                            }
+                            // sqlite-jdbc выполняет только первый оператор, поэтому одна PRAGMA (внешних ключей в схеме нет)
+                            if (type == DatabaseType.SQLITE)
+                                cf.initialSql("PRAGMA journal_mode = WAL;");
                             return cf;
                         })
                 );
@@ -98,35 +102,15 @@ public class Database {
         }
     }
 
-    public static CheckResult checkOrInsertPosition(Position pos){
+    public static void insertPosition(Position pos){
         if (DATA_SOURCE == null)
-            return CheckResult.DB_UNAVAILABLE;
+            return;
 
-        try (Connection conn = DATA_SOURCE.getConnection()){
-            if (existsInDatabase(conn, pos))
-                return CheckResult.EXISTS;
-
-            BUFFER.add(pos);
-            if (BUFFER.size() >= BUFFER_SIZE)
-                flush(conn);
-
-            return CheckResult.NOT_EXISTS;
-        } catch (SQLException e) {
-            Console.error("Не получилось обработать позицию в БД!", e);
-            return CheckResult.DB_UNAVAILABLE;
-        }
+        BUFFER.add(pos);
+        if (BUFFER.size() >= BUFFER_SIZE)
+            flushRemaining();
     }
 
-    private static boolean existsInDatabase(Connection conn, Position pos) throws SQLException {
-        String query = Settings.DATABASE.TYPE.querySelect();
-        try (PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setQueryTimeout(Settings.DATABASE.TIMEOUT);
-            setPositionParams(ps, pos);
-            try (ResultSet rs = ps.executeQuery()) {
-                return rs.next();
-            }
-        }
-    }
     private static void flush(Connection conn) {
         if (BUFFER.isEmpty()) return;
 
@@ -186,6 +170,4 @@ public class Database {
         ps.setInt(3, pos.y());
         ps.setInt(4, pos.z());
     }
-
-    public enum CheckResult { EXISTS, NOT_EXISTS, DB_UNAVAILABLE }
 }

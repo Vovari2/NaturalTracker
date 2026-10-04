@@ -26,11 +26,14 @@ public class ChangesCache {
     }
 
     private void doAdd(Position position) {
-        if (map.putIfAbsent(position, Boolean.TRUE) == null) {
-            queue.add(position);
-            currentSize++;
-            if (currentSize > maxSize) doEvict();
-        }
+        if (map.putIfAbsent(position, Boolean.TRUE) != null)
+            return;
+
+        queue.add(position);
+        currentSize++;
+        if (currentSize > maxSize) doEvict();
+
+        Database.insertPosition(position);
     }
     private void doReload(int newSize, int newBuffer) {
         // Пересоздание пула соединений с БД
@@ -62,19 +65,8 @@ public class ChangesCache {
         ChangesCache c = IMP;
         if (c == null) return false;
 
-        Position pos = Position.of(location);
-        boolean exists = c.map.containsKey(pos);
-
-        c.worker.execute(() -> {
-            Database.CheckResult result = Database.checkOrInsertPosition(pos);
-            if (result == Database.CheckResult.EXISTS)
-                c.map.put(pos, Boolean.TRUE);
-
-            // NOT_EXISTS — не кладём, пусть следующий has снова спросит БД
-            // DB_UNAVAILABLE — не кладём, попробуем позже
-        });
-
-        return exists;
+        // Только кэш, без обращения к БД — ради скорости ответа
+        return c.map.containsKey(Position.of(location));
     }
 
     public static synchronized void enable() {

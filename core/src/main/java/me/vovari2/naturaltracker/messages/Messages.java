@@ -11,7 +11,8 @@ public enum Messages {
     ONLY_FOR_PLAYERS("<red>Команда доступна только игрокам!"),
 
     RELOAD_SUCCESS("<#54B435>Плагин был перезагружен! ({time} ms)"),
-    INSPECT_SUCCESS("<gradient:#54B435:#82CD47>Выдан инспектор для блоков плагина!");
+    INSPECT_SUCCESS("<gradient:#54B435:#82CD47>Выдан инспектор для блоков плагина!"),
+    INSPECT_INVENTORY_FULL("<red>Не удалось выдать инспектор, инвентарь заполнен!");
 
     private Message message;
     Messages(String message){
@@ -50,6 +51,6 @@ public enum Messages {
 
     public static void initialize(){
         try { new Loader(); }
-        catch(Exception e){ Console.error("Failed to load messages: %s".formatted(e.getMessage())); }
+        catch(Exception e){ Console.error("Не удалось загрузить сообщения!", e); }
     }
 }

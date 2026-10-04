@@ -39,6 +39,9 @@ public class BlockListener implements Listener {
     }
     @EventHandler(priority=EventPriority.MONITOR)
     public void onPistonRetract(BlockPistonRetractEvent event){
+        if (event.isCancelled())
+            return;
+
         BlockFace face = event.getDirection();
         for (int i = event.getBlocks().size() - 1; i >= 0; i--){
             Location location = event.getBlocks().get(i).getLocation();

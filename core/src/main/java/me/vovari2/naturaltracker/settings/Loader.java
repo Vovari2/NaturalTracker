@@ -1,5 +1,6 @@
 package me.vovari2.naturaltracker.settings;
 
+import me.vovari2.naturaltracker.Console;
 import me.vovari2.naturaltracker.DatabaseType;
 import me.vovari2.naturaltracker.NaturalTracker;
 import me.vovari2.naturaltracker.utils.FileUtils;
@@ -43,8 +44,13 @@ final class Loader {
     }
     private @NotNull String parseDatabaseUrl(@NotNull String path){
         @Nullable String url = config.getString(path);
-        if (url == null || url.isBlank())
+        if (url == null || url.isBlank()){
+            if (Settings.DATABASE.TYPE != DatabaseType.SQLITE){
+                Console.warn("Не указан database.url для %s, будет использована sqlite!".formatted(Settings.DATABASE.TYPE.name().toLowerCase()));
+                Settings.DATABASE.TYPE = DatabaseType.SQLITE;
+            }
             return Path.of(NaturalTracker.getInstance().getDataFolder().toString(), "data.db").toString();
+        }
 
         return url;
     }

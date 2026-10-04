@@ -22,7 +22,8 @@ public class InspectorCommand extends Command{
         if (!(sender instanceof Player player))
             return Messages.ONLY_FOR_PLAYERS.send(sender);
 
-        player.getInventory().addItem(getBlockInspector());
+        if (!player.getInventory().addItem(getBlockInspector()).isEmpty())
+            return Messages.INSPECT_INVENTORY_FULL.send(player);
         return Messages.INSPECT_SUCCESS.send(player);
     }
 
