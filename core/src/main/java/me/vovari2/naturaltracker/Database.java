@@ -16,6 +16,9 @@ import java.util.*;
 
 public class Database {
     private static AgroalDataSource DATA_SOURCE;
+    // Снимок настроек на момент создания пула: при reload Settings меняются раньше, чем пересоздаётся пул
+    private static DatabaseType TYPE;
+    private static int TIMEOUT;
 
     private static final Set<Position> BUFFER = new HashSet<>();
     private static volatile int BUFFER_SIZE;
@@ -52,7 +55,10 @@ public class Database {
         BUFFER_SIZE = Settings.DATABASE.BUFFER_SIZE;
         DATABASE_SIZE = Settings.DATABASE.SIZE;
 
-        DatabaseType type = Settings.DATABASE.TYPE;
+        TYPE = Settings.DATABASE.TYPE;
+        TIMEOUT = Settings.DATABASE.TIMEOUT;
+
+        DatabaseType type = TYPE;
         String url = type.buildUrl(Settings.DATABASE.URL);
         if (type == DatabaseType.MYSQL)
             url += (url.contains("?") ? "&" : "?") + "useServerPrepStmts=true&cachePrepStmts=true";
@@ -88,9 +94,11 @@ public class Database {
                 Console.info("Таблицы в базе данных успешно инициализированы!");
             }
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
+            if (DATA_SOURCE != null)
+                DATA_SOURCE.close();
             DATA_SOURCE = null;
-            Console.warn("Критическая ошибка при инициализации базы данных: ", e);
+            Console.error("Не удалось инициализировать базу данных!", e);
         }
     }
     private static void flushRemaining() {
@@ -115,7 +123,7 @@ public class Database {
         if (BUFFER.isEmpty()) return;
 
         // Делаем снимок и очищаем буфер до записи.
-        // Если insertBatch упадёт — данные потеряются. Это осознанное решение: позиции перезапишутся при следующем has для тех же блоков.
+        // Если insertBatch упадёт — данные потеряются. Это осознанное решение: потеря нескольких позиций допустима.
         Set<Position> snapshot = new HashSet<>(BUFFER);
         BUFFER.clear();
 
@@ -124,9 +132,8 @@ public class Database {
     private static void insertBatch(Connection conn, Set<Position> batch) {
         if (batch.isEmpty()) return;
 
-        String query = Settings.DATABASE.TYPE.queryInsert();
-        try (PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setQueryTimeout(Settings.DATABASE.TIMEOUT);
+        try (PreparedStatement ps = conn.prepareStatement(TYPE.queryInsert())) {
+            ps.setQueryTimeout(TIMEOUT);
             for (Position pos : batch) {
                 setPositionParams(ps, pos);
                 ps.addBatch();
@@ -140,23 +147,21 @@ public class Database {
         enforceSizeLimit(conn);
     }
     private static void enforceSizeLimit(Connection conn) {
-        String countQuery = Settings.DATABASE.TYPE.queryCount();
-        String deleteQuery = Settings.DATABASE.TYPE.queryDeleteOldest();
-
+        // id растёт автоинкрементом, поэтому вместо медленного COUNT берём MAX(id) по первичному ключу.
+        // Из-за дыр в id строк останется чуть меньше DATABASE_SIZE — для лимита это не важно.
         try {
-            int count;
-            try (PreparedStatement ps = conn.prepareStatement(countQuery);
+            long maxId;
+            try (PreparedStatement ps = conn.prepareStatement(TYPE.queryMaxId());
                  ResultSet rs = ps.executeQuery()) {
-                rs.next();
-                count = rs.getInt(1);
+                maxId = rs.next() ? rs.getLong(1) : 0;
             }
 
-            int excess = count - DATABASE_SIZE;
-            if (excess <= 0) return;
+            long threshold = maxId - DATABASE_SIZE;
+            if (threshold <= 0) return;
 
-            try (PreparedStatement ps = conn.prepareStatement(deleteQuery)) {
-                ps.setQueryTimeout(Settings.DATABASE.TIMEOUT);
-                ps.setInt(1, excess);
+            try (PreparedStatement ps = conn.prepareStatement(TYPE.queryDeleteOldest())) {
+                ps.setQueryTimeout(TIMEOUT);
+                ps.setLong(1, threshold);
                 ps.executeUpdate();
             }
         } catch (SQLException e) {

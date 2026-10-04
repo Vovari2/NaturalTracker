@@ -70,8 +70,8 @@ public class ChangesCache {
     }
 
     public static synchronized void enable() {
-        if (IMP != null)
-            IMP.worker.close();
+        // При повторном вызове закрываем старый воркер и пул со сбросом буфера
+        disable();
 
         Database.enable();
         IMP = new ChangesCache(Settings.CHANGES.MAX_SIZE, Settings.CHANGES.BUFFER);
