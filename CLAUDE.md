@@ -28,6 +28,7 @@
 | `commands/` | Подкоманды — наследники абстрактного `Command(instance, sender, args)` с `boolean execute()`; `ReloadCommand` (`reload`), `InspectorCommand` (`inspect`, выдаёт предмет-инспектор) |
 | `messages/` | `Messages` — enum сообщений MiniMessage с плейсхолдерами `{name}` (`.replace(...).send(sender)`); `Loader` читает и дописывает `messages.json` в папке плагина |
 | `settings/` | `Settings` — статические поля во вложенных классах; `Loader` читает `settings.yml` |
+| `placeholders/` | `NaturalTrackerExpansion` — PlaceholderAPI (softdepend): `%naturaltracker_has_<world>_<x>_<y>_<z>%` → `wasGenerated`; `{...}` внутри раскрываются как плейсхолдеры, разбор координат справа |
 | `utils/` | `FileUtils` (YAML/JSON), `TextUtils.toComponent` (MiniMessage) |
 
 Модуль `api` содержит копию `NaturalTrackerAPI` и зависит от `core` как `compileOnly`.

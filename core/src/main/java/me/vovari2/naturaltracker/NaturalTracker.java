@@ -4,6 +4,7 @@ import me.vovari2.naturaltracker.changes.ChangesCache;
 import me.vovari2.naturaltracker.listeners.BlockListener;
 import me.vovari2.naturaltracker.listeners.InspectorListener;
 import me.vovari2.naturaltracker.messages.Messages;
+import me.vovari2.naturaltracker.placeholders.NaturalTrackerExpansion;
 import me.vovari2.naturaltracker.settings.Settings;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.HandlerList;
@@ -30,6 +31,10 @@ public final class NaturalTracker extends JavaPlugin {
 
         registerListeners();
         this.getServer().getCommandMap().register(PLUGIN_NAME.toLowerCase(), new NaturalTrackerCommand(INSTANCE));
+
+        // PlaceholderAPI
+        if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI"))
+            new NaturalTrackerExpansion().register();
 
         Console.info("<green>Плагин %s %s включён! (%d ms)".formatted(PLUGIN_NAME, VERSION, System.currentTimeMillis() - time));
     }
@@ -66,6 +71,15 @@ public final class NaturalTracker extends JavaPlugin {
 
     public static NaturalTracker getInstance() {
         return INSTANCE;
+    }
+    public static String getPluginName(){
+        return INSTANCE.PLUGIN_NAME;
+    }
+    public static String getAuthors(){
+        return String.join(", ", INSTANCE.getPluginMeta().getAuthors());
+    }
+    public static String getVersion(){
+        return INSTANCE.VERSION;
     }
     public static NamespacedKey getInspectorNamespacedKey() {
         return INSTANCE.INSPECTOR_NAMESPACED_KEY;
