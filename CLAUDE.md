@@ -1,0 +1,69 @@
+# NaturalTracker
+
+Плагин для Paper (Minecraft 1.20+), который отслеживает, был ли блок **сгенерирован миром** или **изменён игроком/механизмом**.
+Позиции изменённых блоков хранятся в in-memory кэше (`ChangesCache`) и в БД (SQLite / MySQL / PostgreSQL через пул Agroal).
+Другие плагины используют `NaturalTrackerAPI.wasGenerated(Location)`.
+
+Автор: Vovari2. Язык сообщений, логов и комментариев — **русский**.
+
+## Сборка
+
+- Gradle, Java 17, модули `api` и `core`.
+- `./gradlew :core:shadowJar` — собирает `NaturalTracker-<version>.jar` прямо в `D:\Minecraft\Servers\Paper 1.20.1\plugins\`.
+- Версия задаётся в корневом `build.gradle` (`allprojects.version`) и подставляется в `plugin.yml`.
+- Тестов нет; проверка — запуск на локальном сервере Paper.
+
+## Структура (`core/src/main/java/me/vovari2/naturaltracker/`)
+
+| Файл / пакет | Назначение |
+|---|---|
+| `NaturalTracker` | Главный класс `JavaPlugin`: `onEnable` / `onDisable` / `onReload`, регистрация слушателей |
+| `NaturalTrackerCommand` | `BukkitCommand` `/naturaltracker` (алиас `/nt`), регистрируется через `getCommandMap()`; проверяет `naturaltracker.admin` и по `args[0]` создаёт подкоманду |
+| `Console` | Статический логгер, принимает строки MiniMessage |
+| `Database`, `DatabaseType` | Пул соединений, буферизованная запись позиций, ограничение размера таблицы; SQL-запросы для каждого типа БД лежат в enum |
+| `changes/ChangesCache` | Синглтон-кэш позиций (`ConcurrentHashMap` + FIFO-очередь для вытеснения); вся работа — через `SerialWorker` |
+| `changes/SerialWorker` | Один фоновый поток с ограниченной очередью задач (при переполнении задача выполняется в вызывающем потоке) |
+| `changes/Position` | Ключ позиции: UUID мира как `byte[16]` + x/y/z |
+| `listeners/` | `BlockListener` (place/break/pistons → `ChangesCache.log`), `InspectorListener` (предмет-инспектор) |
+| `commands/` | Подкоманды — наследники абстрактного `Command(instance, sender, args)` с `boolean execute()`; `ReloadCommand` (`reload`), `InspectorCommand` (`inspect`, выдаёт предмет-инспектор) |
+| `messages/` | `Messages` — enum сообщений MiniMessage с плейсхолдерами `{name}` (`.replace(...).send(sender)`); `Loader` читает и дописывает `messages.json` в папке плагина |
+| `settings/` | `Settings` — статические поля во вложенных классах; `Loader` читает `settings.yml` |
+| `utils/` | `FileUtils` (YAML/JSON), `TextUtils.toComponent` (MiniMessage) |
+
+Модуль `api` содержит копию `NaturalTrackerAPI` и зависит от `core` как `compileOnly`.
+
+## Жизненный цикл
+
+`onEnable`: `Messages.initialize()` → `Settings.initialize()` → `ChangesCache.enable()` (внутри `Database.enable()`) → слушатели → регистрация `NaturalTrackerCommand`.
+PDC-ключ предмета-инспектора — `NaturalTracker.getInspectorNamespacedKey()`.
+`onReload`: `Messages.initialize()` → `Settings.initialize()` → `ChangesCache.reload()` (в воркере: `Database.reload()` + новые размеры) → перерегистрация слушателей.
+`onDisable`: `ChangesCache.disable()` (закрывает воркер, затем `Database.disable()` со сбросом буфера).
+
+## Стиль кода
+
+Писать в стиле существующего кода:
+
+- **Статические менеджеры** с методами `enable()` / `reload()` / `disable()` вместо DI (у конфигов `Settings` / `Messages` — один `initialize()`, он же для reload). Синглтон — поле `private static ... IMP` / `INSTANCE`.
+- **Именование**: статические поля и константы — `UPPER_SNAKE_CASE` (даже не final: `DATA_SOURCE`, `BUFFER`); поля экземпляра — `camelCase`. В `Settings` вложенные классы тоже капсом (`Settings.DATABASE.POOL.MAX_SIZE`).
+- Отступ 4 пробела, открывающая скобка на той же строке, часто без пробела перед ней: `public void foo(){`.
+- Однострочные `if` без фигурных скобок, ранний `return`:
+  ```java
+  if (event.isCancelled())
+      return;
+  ```
+  Короткие guard-ы допустимо в одну строку: `if (c == null) return;`.
+- Короткие геттеры — в одну строку: `public int x() { return x; }`.
+- Компактный try/catch для простых случаев: `try { new Loader(); } catch(Exception e){ Console.error(...); }`.
+- Форматирование строк через `"...%s...".formatted(...)`, не конкатенацию и не `String.format`.
+- Аннотации `@NotNull` / `@Nullable` из `org.jetbrains.annotations` — в утилитах и парсинге.
+- Текст для игроков и консоли — MiniMessage (`<green>`, `<gradient:#54B435:#82CD47>`, `<!italic>`). Игрокам — через `Messages.X.send(sender)` (новый текст = новая константа в `Messages`), в консоль — `Console.*`.
+- Сообщения об ошибках: `"Не получилось ... !"` / `"Не удалось ... !"`, исключение передаётся вторым аргументом в `Console.warn/error`.
+- Комментарии редкие, на русском, объясняют «почему», а не «что».
+- Java 17: records-подобные классы, switch-выражения с `->`, pattern matching в `instanceof`, text blocks для SQL.
+- Числовые литералы с разделителями: `1_000_000`.
+- Слушатели изменений — `EventPriority.MONITOR` с проверкой `isCancelled()`.
+
+## Конфигурация (`settings.yml`)
+
+Ключи, которые читает `Loader`: `changes.max_size`, `changes.buffer`, `database.{type,url,user,password,size,timeout,buffer_size}`, `database.pool.{min_size,max_size,timeout_time}`.
+При добавлении настройки: поле в `Settings`, чтение с дефолтом в `Loader`, ключ в `resources/settings.yml` (`FileUtils.loadYamlFile` сам допишет недостающие ключи в файл сервера).

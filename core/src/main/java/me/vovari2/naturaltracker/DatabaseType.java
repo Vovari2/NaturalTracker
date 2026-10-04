@@ -9,9 +9,8 @@ public enum DatabaseType {
             "org.sqlite.JDBC",
             false,
             "INSERT OR IGNORE INTO changes (world, x, y, z) VALUES (?, ?, ?, ?);",
-            "SELECT id FROM changes WHERE world = ? AND x = ? AND y = ? AND z = ?;",
-            "SELECT MAX(id) FROM changes;",
-            "DELETE FROM changes WHERE id <= ?;",
+            "SELECT COUNT(id) FROM changes;",
+            "DELETE FROM changes WHERE id IN (SELECT id FROM changes ORDER BY id LIMIT ?);",
             """
                 CREATE TABLE IF NOT EXISTS changes (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -28,9 +27,8 @@ public enum DatabaseType {
             "com.mysql.cj.jdbc.Driver",
             true,
             "INSERT IGNORE INTO changes (world, x, y, z) VALUES (?, ?, ?, ?);",
-            "SELECT id FROM changes WHERE world = ? AND x = ? AND y = ? AND z = ?;",
-            "SELECT MAX(id) FROM changes;",
-            "DELETE FROM changes WHERE id <= ?;",
+            "SELECT COUNT(id) FROM changes;",
+            "DELETE FROM changes ORDER BY id LIMIT ?;",
             """
                 CREATE TABLE IF NOT EXISTS changes (
                     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -47,9 +45,8 @@ public enum DatabaseType {
             "org.postgresql.Driver",
             true,
             "INSERT INTO changes (world, x, y, z) VALUES (?, ?, ?, ?) ON CONFLICT (world, x, y, z) DO NOTHING;",
-            "SELECT id FROM changes WHERE world = ? AND x = ? AND y = ? AND z = ?;",
-            "SELECT MAX(id) FROM changes;",
-            "DELETE FROM changes WHERE id <= ?;",
+            "SELECT COUNT(id) FROM changes;",
+            "DELETE FROM changes WHERE id IN (SELECT id FROM changes ORDER BY id LIMIT ?);",
             """
                 CREATE TABLE IF NOT EXISTS changes (
                     id BIGSERIAL PRIMARY KEY,
@@ -66,21 +63,19 @@ public enum DatabaseType {
     private final String driverClass;
     private final boolean requiresCredentials;
     private final String queryInsert;
-    private final String querySelect;
-    private final String queryMaxId;
+    private final String queryCount;
     private final String queryDeleteOldest;
     private final String queryCreateTable;
 
     DatabaseType(String urlPrefix, String driverClass, boolean requiresCredentials,
-                 String queryInsert, String querySelect,
-                 String queryMaxId, String queryDeleteOldest,
+                 String queryInsert,
+                 String queryCount, String queryDeleteOldest,
                  String queryCreateTable) {
         this.urlPrefix = urlPrefix;
         this.driverClass = driverClass;
         this.requiresCredentials = requiresCredentials;
         this.queryInsert = queryInsert;
-        this.querySelect = querySelect;
-        this.queryMaxId = queryMaxId;
+        this.queryCount = queryCount;
         this.queryDeleteOldest = queryDeleteOldest;
         this.queryCreateTable = queryCreateTable;
     }
@@ -93,10 +88,7 @@ public enum DatabaseType {
     public String queryInsert(){
         return queryInsert;
     }
-    public String querySelect(){
-        return querySelect;
-    }
-    public String queryMaxId() { return queryMaxId; }
+    public String queryCount() { return queryCount; }
     public String queryDeleteOldest() { return queryDeleteOldest; }
     public String queryCreateTable(){
         return queryCreateTable;

@@ -16,13 +16,17 @@ import java.util.*;
 
 public class Database {
     private static AgroalDataSource DATA_SOURCE;
+
     // Снимок настроек на момент создания пула: при reload Settings меняются раньше, чем пересоздаётся пул
     private static DatabaseType TYPE;
     private static int TIMEOUT;
+    private static int BUFFER_SIZE;
+    private static int DATABASE_SIZE;
 
     private static final Set<Position> BUFFER = new HashSet<>();
-    private static volatile int BUFFER_SIZE;
-    private static volatile int DATABASE_SIZE;
+
+    // Число строк в таблице: COUNT считается один раз при создании пула, дальше ведётся вручную
+    private static long ROWS;
 
     public static void enable() {
         initialize();
@@ -91,7 +95,14 @@ public class Database {
                 try (Statement stmt = conn.createStatement()) {
                     stmt.execute(type.queryCreateTable());
                 }
+                try (Statement stmt = conn.createStatement();
+                     ResultSet rs = stmt.executeQuery(type.queryCount())) {
+                    ROWS = rs.next() ? rs.getLong(1) : 0;
+                }
                 Console.info("Таблицы в базе данных успешно инициализированы!");
+
+                // Если database.size уменьшили, лишнее удалится сразу
+                enforceSizeLimit(conn);
             }
 
         } catch (Exception e) {
@@ -138,7 +149,10 @@ public class Database {
                 setPositionParams(ps, pos);
                 ps.addBatch();
             }
-            ps.executeBatch();
+            // Дубликаты игнорируются БД и возвращают 0, поэтому считаем только реально вставленные строки
+            for (int result : ps.executeBatch())
+                if (result > 0 || result == Statement.SUCCESS_NO_INFO)
+                    ROWS++;
 
         } catch (SQLException e) {
             Console.error("Не получилось записать %s позиций в БД!".formatted(batch.size()), e);
@@ -147,23 +161,14 @@ public class Database {
         enforceSizeLimit(conn);
     }
     private static void enforceSizeLimit(Connection conn) {
-        // id растёт автоинкрементом, поэтому вместо медленного COUNT берём MAX(id) по первичному ключу.
-        // Из-за дыр в id строк останется чуть меньше DATABASE_SIZE — для лимита это не важно.
-        try {
-            long maxId;
-            try (PreparedStatement ps = conn.prepareStatement(TYPE.queryMaxId());
-                 ResultSet rs = ps.executeQuery()) {
-                maxId = rs.next() ? rs.getLong(1) : 0;
-            }
+        // Когда таблица заполнена, удаляем столько старых строк, сколько только что вставили
+        long excess = ROWS - DATABASE_SIZE;
+        if (excess <= 0) return;
 
-            long threshold = maxId - DATABASE_SIZE;
-            if (threshold <= 0) return;
-
-            try (PreparedStatement ps = conn.prepareStatement(TYPE.queryDeleteOldest())) {
-                ps.setQueryTimeout(TIMEOUT);
-                ps.setLong(1, threshold);
-                ps.executeUpdate();
-            }
+        try (PreparedStatement ps = conn.prepareStatement(TYPE.queryDeleteOldest())) {
+            ps.setQueryTimeout(TIMEOUT);
+            ps.setLong(1, excess);
+            ROWS -= ps.executeUpdate();
         } catch (SQLException e) {
             Console.error("Не получилось подрезать таблицу до %d записей!".formatted(DATABASE_SIZE), e);
         }

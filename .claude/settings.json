@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./gradlew build:*)",
+      "Bash(./gradlew :core:shadowJar:*)",
+      "Bash(./gradlew compileJava:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)"
+    ],
+    "deny": [
+      "Read(./build/**)",
+      "Read(./core/build/**)",
+      "Read(./api/build/**)",
+      "Read(./.gradle/**)",
+      "Read(./.opencode/**)"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+# Gradle
+.gradle/
+build/
+api/build/
+core/build/
+
+# IntelliJ IDEA
+out/
+*.iws
+
+# Инструменты
+.opencode/
+.claude/settings.local.json
