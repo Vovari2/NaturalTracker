@@ -53,3 +53,30 @@ processResources {
         expand props
     }
 }
+
+tasks.register('runServer', Exec) {
+    dependsOn 'shadowJar'
+
+    group = 'application'
+    description = 'Собирает плагин и запускает тестовый сервер'
+
+    def serverDir = file('D:/Minecraft/Servers/Paper 1.20.1')
+    def serverJarName = 'paper-1.20.1-196.jar'
+
+    workingDir = serverDir
+
+    def jvmArgs = [
+            '-Xms4G', // Увеличил до 4G для стабильности с базами данных
+            '-Xmx4G',
+            '-XX:+UseG1GC', '-XX:+ParallelRefProcEnabled', '-XX:MaxGCPauseMillis=200',
+            '-XX:+UnlockExperimentalVMOptions', '-XX:+DisableExplicitGC', '-XX:+AlwaysPreTouch',
+            '-XX:G1NewSizePercent=40', '-XX:G1MaxNewSizePercent=50', '-XX:G1HeapRegionSize=16M',
+            '-XX:G1ReservePercent=15', '-XX:G1HeapWastePercent=5', '-XX:G1MixedGCCountTarget=4',
+            '-XX:InitiatingHeapOccupancyPercent=20', '-XX:G1MixedGCLiveThresholdPercent=90',
+            '-XX:G1RSetUpdatingPauseTimePercent=5', '-XX:SurvivorRatio=32', '-XX:+PerfDisableSharedMem',
+            '-XX:MaxTenuringThreshold=1', '-Dusing.aikars.flags=https://mcflags.emc.gs',
+            '--add-modules=jdk.incubator.vector', '-Daikars.new.flags=true'
+    ]
+
+    commandLine = ['cmd', '/c', 'start', '"Minecraft Server"', 'java'] + jvmArgs + ['-jar', serverJarName, '-nogui']
+}
