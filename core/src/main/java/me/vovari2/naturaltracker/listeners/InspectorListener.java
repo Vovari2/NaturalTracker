@@ -1,7 +1,7 @@
 package me.vovari2.naturaltracker.listeners;
 
 import me.vovari2.naturaltracker.NaturalTracker;
-import me.vovari2.naturaltracker.changes.ChangesCache;
+import me.vovari2.naturaltracker.changes.ChunkCache;
 import me.vovari2.naturaltracker.utils.TextUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -31,7 +31,13 @@ public class InspectorListener implements Listener {
             block = block.getWorld().getBlockAt(block.getLocation().clone().add(face.getModX(), face.getModY(), face.getModZ()));
         }
 
-        boolean wasGenerated = !ChangesCache.has(block.getLocation());
+        if (!ChunkCache.changeIsAccurate(block.getLocation())){
+            event.getPlayer().sendMessage(TextUtils.toComponent("<yellow>Данные чанка ещё загружаются, попробуйте снова!"));
+            event.setCancelled(true);
+            return;
+        }
+
+        boolean wasGenerated = !ChunkCache.wasChanged(block.getLocation());
         event.getPlayer().sendMessage(TextUtils.toComponent(wasGenerated ? "<green>Блок был сгенерирован!" : "<red>Блок не был сгенерирован!"));
         event.setCancelled(true);
     }

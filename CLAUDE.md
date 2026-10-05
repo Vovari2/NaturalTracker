@@ -1,7 +1,7 @@
 # NaturalTracker
 
 Плагин для Paper (Minecraft 1.20+), который отслеживает, был ли блок **сгенерирован миром** или **изменён игроком/механизмом**.
-Позиции изменённых блоков хранятся в in-memory кэше (`ChangesCache`) и в БД (SQLite / MySQL / PostgreSQL через пул Agroal).
+Изменённые блоки хранятся по чанкам: `BitSet` на чанк в in-memory кэше (`ChunkCache`, только пока чанк загружен) и в БД (SQLite / MySQL / PostgreSQL через пул Agroal, одна сжатая строка на чанк).
 Другие плагины используют `NaturalTrackerAPI.wasGenerated(Location)`.
 
 Автор: Vovari2. Язык сообщений, логов и комментариев — **русский**.
@@ -20,25 +20,27 @@
 | `NaturalTracker` | Главный класс `JavaPlugin`: `onEnable` / `onDisable` / `onReload`, регистрация слушателей |
 | `NaturalTrackerCommand` | `BukkitCommand` `/naturaltracker` (алиас `/nt`), регистрируется через `getCommandMap()`; проверяет `naturaltracker.admin` и по `args[0]` создаёт подкоманду |
 | `Console` | Статический логгер, принимает строки MiniMessage |
-| `Database`, `DatabaseType` | Пул соединений, буферизованная запись позиций, ограничение размера таблицы; SQL-запросы для каждого типа БД лежат в enum |
-| `changes/ChangesCache` | Синглтон-кэш позиций (`ConcurrentHashMap` + FIFO-очередь для вытеснения); вся работа — через `SerialWorker` |
-| `changes/SerialWorker` | Один фоновый поток с ограниченной очередью задач (при переполнении задача выполняется в вызывающем потоке) |
-| `changes/Position` | Ключ позиции: UUID мира как `byte[16]` + x/y/z |
-| `listeners/` | `BlockListener` (place/break/pistons → `ChangesCache.log`), `InspectorListener` (предмет-инспектор) |
+| `Database`, `DatabaseType` | Пул соединений; `loadChunk` / `saveChunks` (пачка в одной транзакции, вызываются только из воркера); необязательное ограничение числа чанков в таблице (`database.limit`), удаляются давно не обновлявшиеся; SQL для каждого типа БД лежит в enum |
+| `changes/ChangesCache` | Синглтон-кэш `HashMap<ChunkKey, ChunkEntry>`. **`log` / `has` / `changeIsAccurate` и события чанков — только из главного потока** (из других потоков игнорируются). Загрузка из БД при `ChunkLoadEvent` (асинхронно, результат подмешивается в главном потоке), сохранение при выгрузке и по таймеру `changes.autosave` |
+| `changes/ChunkEntry` | `BitSet` изменённых блоков чанка (индекс `((y - minY) << 8) \| (z << 4) \| x`), флаги `loaded` / `dirty`; сжатие Deflate |
+| `changes/ChunkKey` | Ключ чанка: UUID мира как `byte[16]` + cx/cz |
+| `changes/ChunkSnapshot` | Копия битов для записи; `merge = true`, если данные из БД не успели подгрузиться (воркер подмешает старые перед записью) |
+| `changes/SerialWorker` | Один фоновый поток с ограниченной очередью задач (при переполнении ждёт место, `close()` дописывает очередь до конца) |
+| `listeners/` | `BlockListener` (place/break/pistons → `ChangesCache.log`), `ChunkListener` (load/unload чанков), `InspectorListener` (предмет-инспектор) |
 | `commands/` | Подкоманды — наследники абстрактного `Command(instance, sender, args)` с `boolean execute()`; `ReloadCommand` (`reload`), `InspectorCommand` (`inspect`, выдаёт предмет-инспектор) |
 | `messages/` | `Messages` — enum сообщений MiniMessage с плейсхолдерами `{name}` (`.replace(...).send(sender)`); `Loader` читает и дописывает `messages.json` в папке плагина |
 | `settings/` | `Settings` — статические поля во вложенных классах; `Loader` читает `settings.yml` |
-| `placeholders/` | `NaturalTrackerExpansion` — PlaceholderAPI (softdepend): `%naturaltracker_has_<world>_<x>_<y>_<z>%` → `wasGenerated`; `{...}` внутри раскрываются как плейсхолдеры, разбор координат справа |
+| `placeholders/` | `NaturalTrackerExpansion` — PlaceholderAPI (softdepend): `%naturaltracker_has_<world>_<x>_<y>_<z>%` → `wasChanged`; `{...}` внутри раскрываются как плейсхолдеры, разбор координат справа |
 | `utils/` | `FileUtils` (YAML/JSON), `TextUtils.toComponent` (MiniMessage) |
 
 Модуль `api` содержит копию `NaturalTrackerAPI` и зависит от `core` как `compileOnly`.
 
 ## Жизненный цикл
 
-`onEnable`: `Messages.initialize()` → `Settings.initialize()` → `ChangesCache.enable()` (внутри `Database.enable()`) → слушатели → регистрация `NaturalTrackerCommand`.
+`onEnable`: `Messages.initialize()` → `Settings.initialize()` → `ChangesCache.enable()` (внутри `Database.enable()`, затем подключение уже загруженных чанков и автосохранение) → слушатели → регистрация `NaturalTrackerCommand`.
 PDC-ключ предмета-инспектора — `NaturalTracker.getInspectorNamespacedKey()`.
-`onReload`: `Messages.initialize()` → `Settings.initialize()` → `ChangesCache.reload()` (в воркере: `Database.reload()` + новые размеры) → перерегистрация слушателей.
-`onDisable`: `ChangesCache.disable()` (закрывает воркер, затем `Database.disable()` со сбросом буфера).
+`onReload`: `Messages.initialize()` → `Settings.initialize()` → `ChangesCache.reload()` (в воркере: `Database.reload()`; пересоздаётся таймер автосохранения) → перерегистрация слушателей.
+`onDisable`: `ChangesCache.disable()` (сбрасывает все изменённые чанки в воркер, воркер дописывает очередь и закрывается, затем `Database.disable()`).
 
 ## Стиль кода
 
@@ -66,5 +68,5 @@ PDC-ключ предмета-инспектора — `NaturalTracker.getInspec
 
 ## Конфигурация (`settings.yml`)
 
-Ключи, которые читает `Loader`: `changes.max_size`, `changes.buffer`, `database.{type,url,user,password,size,timeout,buffer_size}`, `database.pool.{min_size,max_size,timeout_time}`.
+Ключи, которые читает `Loader`: `changes.autosave`, `database.{type,url,user,password,limit,size,timeout}`, `database.pool.{min_size,max_size,timeout_time}`.
 При добавлении настройки: поле в `Settings`, чтение с дефолтом в `Loader`, ключ в `resources/settings.yml` (`FileUtils.loadYamlFile` сам допишет недостающие ключи в файл сервера).

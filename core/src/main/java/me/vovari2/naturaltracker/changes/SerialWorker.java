@@ -4,6 +4,7 @@ import me.vovari2.naturaltracker.Console;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public final class SerialWorker implements AutoCloseable {
@@ -29,12 +30,17 @@ public final class SerialWorker implements AutoCloseable {
         if (tasks.offer(task))
             return;
 
-        task.run();
+        // Очередь переполнена: ждём место, а не выполняем сами, чтобы не нарушить порядок задач
+        try {
+            tasks.put(task);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
+    // Не прерываем поток: он должен дописать в БД всё, что осталось в очереди
     public void close() {
         if (!running) return;
         running = false;
-        thread.interrupt();
         try {
             thread.join();
         } catch (InterruptedException e) {
@@ -42,9 +48,10 @@ public final class SerialWorker implements AutoCloseable {
         }
     }
     private void processLoop() {
-        while (running) {
+        while (running || !tasks.isEmpty()) {
             try {
-                tasks.take().run();
+                Runnable task = tasks.poll(100, TimeUnit.MILLISECONDS);
+                if (task != null) task.run();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 return;

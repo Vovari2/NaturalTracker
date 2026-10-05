@@ -1,7 +1,8 @@
 package me.vovari2.naturaltracker;
 
-import me.vovari2.naturaltracker.changes.ChangesCache;
+import me.vovari2.naturaltracker.changes.ChunkCache;
 import me.vovari2.naturaltracker.listeners.BlockListener;
+import me.vovari2.naturaltracker.listeners.ChunkListener;
 import me.vovari2.naturaltracker.listeners.InspectorListener;
 import me.vovari2.naturaltracker.messages.Messages;
 import me.vovari2.naturaltracker.placeholders.NaturalTrackerExpansion;
@@ -27,7 +28,7 @@ public final class NaturalTracker extends JavaPlugin {
 
         Messages.initialize();
         Settings.initialize();
-        ChangesCache.enable();
+        ChunkCache.enable();
 
         registerListeners();
         this.getServer().getCommandMap().register(PLUGIN_NAME.toLowerCase(), new NaturalTrackerCommand(INSTANCE));
@@ -40,7 +41,7 @@ public final class NaturalTracker extends JavaPlugin {
     }
 
     public void onDisable() {
-        ChangesCache.disable();
+        ChunkCache.disable();
         unregisterListeners();
 
         Console.info("<red>Плагин %s %s выключен!".formatted(PLUGIN_NAME, VERSION));
@@ -49,10 +50,9 @@ public final class NaturalTracker extends JavaPlugin {
     public long onReload(){
         long time = System.currentTimeMillis();
 
-
         Messages.initialize();
         Settings.initialize();
-        ChangesCache.reload();
+        ChunkCache.reload();
 
         unregisterListeners();
         registerListeners();
@@ -62,6 +62,7 @@ public final class NaturalTracker extends JavaPlugin {
     }
 
     private void registerListeners(){
+        getServer().getPluginManager().registerEvents(new ChunkListener(), this);
         getServer().getPluginManager().registerEvents(new BlockListener(), this);
         getServer().getPluginManager().registerEvents(new InspectorListener(), this);
     }

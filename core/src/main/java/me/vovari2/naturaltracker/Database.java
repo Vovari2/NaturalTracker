@@ -6,13 +6,18 @@ import io.agroal.api.configuration.AgroalDataSourceConfiguration;
 import io.agroal.api.configuration.supplier.AgroalDataSourceConfigurationSupplier;
 import io.agroal.api.security.NamePrincipal;
 import io.agroal.api.security.SimplePassword;
-import me.vovari2.naturaltracker.changes.Position;
+import me.vovari2.naturaltracker.changes.ChunkEntry;
+import me.vovari2.naturaltracker.changes.ChunkKey;
+import me.vovari2.naturaltracker.changes.ChunkSnapshot;
 import me.vovari2.naturaltracker.settings.Settings;
+import org.jetbrains.annotations.Nullable;
 
 import java.sql.*;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.BitSet;
+import java.util.List;
+import java.util.zip.DataFormatException;
 
 public class Database {
     private static AgroalDataSource DATA_SOURCE;
@@ -20,11 +25,8 @@ public class Database {
     // Снимок настроек на момент создания пула: при reload Settings меняются раньше, чем пересоздаётся пул
     private static DatabaseType TYPE;
     private static int TIMEOUT;
-    private static int BUFFER_SIZE;
+    private static boolean LIMIT_ENABLED;
     private static int DATABASE_SIZE;
-
-    private static final Set<Position> BUFFER = new HashSet<>();
-    private static long ROWS_COUNT;
 
     public static void enable() {
         initialize();
@@ -35,22 +37,22 @@ public class Database {
     }
     public static void disable() {
         if (DATA_SOURCE != null) {
-            flushRemaining();
             try {
                 DATA_SOURCE.close();
                 Console.info("Источник данных успешно закрыт!");
             } catch (Exception e) {
                 Console.warn("Не получилось закрыть старый источник данных!", e);
             }
+            DATA_SOURCE = null;
         }
     }
 
     private static void initialize(){
-        BUFFER_SIZE = Settings.DATABASE.BUFFER_SIZE;
-        DATABASE_SIZE = Settings.DATABASE.SIZE;
+        LIMIT_ENABLED = Settings.DATABASE.LIMIT;
+        DATABASE_SIZE = Settings.DATABASE.LIMIT_SIZE;
 
         TYPE = Settings.DATABASE.TYPE;
-        TIMEOUT = Settings.DATABASE.TIMEOUT;
+        TIMEOUT = Settings.DATABASE.POOL.TIMEOUT_QUERY;
 
         DatabaseType type = TYPE;
         String url = type.buildUrl(Settings.DATABASE.URL);
@@ -85,13 +87,13 @@ public class Database {
                 try (Statement stmt = conn.createStatement()) {
                     stmt.execute(type.queryCreateTable());
                 }
-                try (Statement stmt = conn.createStatement();
-                     ResultSet rs = stmt.executeQuery(type.queryCount())) {
-                    ROWS_COUNT = rs.next() ? rs.getLong(1) : 0;
-                }
+                if (type.queryCreateIndex() != null)
+                    try (Statement stmt = conn.createStatement()) {
+                        stmt.execute(type.queryCreateIndex());
+                    }
                 Console.info("Таблицы в базе данных успешно инициализированы!");
 
-                // Если database.size уменьшили, лишнее удалится сразу
+                // Если database.size уменьшили или лимит включили после перезапуска, лишнее удалится сразу
                 enforceSizeLimit(conn);
             }
 
@@ -103,67 +105,110 @@ public class Database {
         }
     }
 
-    public static void insertPosition(Position pos){
-        if (DATA_SOURCE == null)
-            return;
+    /** Только из потока воркера. null — в БД чанка нет (или БД недоступна). */
+    public static @Nullable BitSet loadChunk(ChunkKey key) throws SQLException, DataFormatException {
+        if (DATA_SOURCE == null) return null;
 
-        BUFFER.add(pos);
-        if (BUFFER.size() >= BUFFER_SIZE)
-            flushRemaining();
-    }
-    private static void flushRemaining() {
-        if (DATA_SOURCE == null) return;
         try (Connection conn = DATA_SOURCE.getConnection()) {
-            if (BUFFER.isEmpty()) return;
+            byte[] data = selectChunk(conn, key);
+            return data == null ? null : ChunkEntry.decode(data);
+        }
+    }
+    /** Только из потока воркера. Вся пачка пишется одной транзакцией. */
+    public static void saveChunks(List<ChunkSnapshot> snapshots) {
+        if (DATA_SOURCE == null || snapshots.isEmpty()) return;
 
-            // Делаем снимок и очищаем буфер до записи.
-            // Если insertBatch упадёт — данные потеряются. Это осознанное решение: потеря нескольких позиций допустима.
-            Set<Position> snapshot = new HashSet<>(BUFFER);
-            BUFFER.clear();
+        try (Connection conn = DATA_SOURCE.getConnection()) {
+            conn.setAutoCommit(false);
+            try {
+                long now = System.currentTimeMillis();
+                for (ChunkSnapshot snapshot : snapshots)
+                    writeChunk(conn, snapshot, now);
+                conn.commit();
+            } catch (Exception e) {
+                conn.rollback();
+                Console.error("Не получилось записать %d чанков в БД!".formatted(snapshots.size()), e);
+                return;
+            } finally {
+                conn.setAutoCommit(true);
+            }
 
-            insertBatch(conn, snapshot);
             enforceSizeLimit(conn);
         } catch (SQLException e) {
-            Console.error("Не получилось сбросить буфер БД!", e);
+            Console.error("Не получилось сохранить чанки в БД!", e);
         }
     }
 
-    private static void insertBatch(Connection conn, Set<Position> batch) {
-        if (batch.isEmpty()) return;
+    private static void writeChunk(Connection conn, ChunkSnapshot snapshot, long now) throws SQLException, DataFormatException {
+        ChunkKey key = snapshot.key();
+        byte[] raw = snapshot.raw();
 
-        try (PreparedStatement ps = conn.prepareStatement(TYPE.queryInsert())) {
-            ps.setQueryTimeout(TIMEOUT);
-            for (Position pos : batch) {
-                setPositionParams(ps, pos);
-                ps.addBatch();
+        if (snapshot.merge()) {
+            byte[] old = selectChunk(conn, key);
+            if (old != null) {
+                BitSet merged = ChunkEntry.decode(old);
+                merged.or(BitSet.valueOf(raw));
+                raw = merged.toByteArray();
             }
-            // Дубликаты игнорируются БД и возвращают 0, поэтому считаем только реально вставленные строки
-            for (int result : ps.executeBatch())
-                if (result > 0 || result == Statement.SUCCESS_NO_INFO)
-                    ROWS_COUNT++;
+        }
 
-        } catch (SQLException e) {
-            Console.error("Не получилось записать %s позиций в БД!".formatted(batch.size()), e);
+        // Удаляем чанк из БД, если тот пустой
+        if (raw.length == 0) {
+            try (PreparedStatement ps = conn.prepareStatement(TYPE.queryDelete())) {
+                ps.setQueryTimeout(TIMEOUT);
+                setKeyParams(ps, key);
+                ps.executeUpdate();
+            }
+            return;
+        }
+
+        // Обновляем данные уже существующего чанка
+        try (PreparedStatement ps = conn.prepareStatement(TYPE.queryUpsert())) {
+            ps.setQueryTimeout(TIMEOUT);
+            setKeyParams(ps, key);
+            ps.setBytes(4, ChunkEntry.encode(raw));
+            ps.setLong(5, now);
+            ps.executeUpdate();
+        }
+    }
+    private static @Nullable byte[] selectChunk(Connection conn, ChunkKey key) throws SQLException {
+        try (PreparedStatement ps = conn.prepareStatement(TYPE.querySelect())) {
+            ps.setQueryTimeout(TIMEOUT);
+            setKeyParams(ps, key);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() ? rs.getBytes(1) : null;
+            }
         }
     }
     private static void enforceSizeLimit(Connection conn) {
-        // Когда таблица заполнена, удаляем столько старых строк, сколько только что вставили
-        long excess = ROWS_COUNT - DATABASE_SIZE;
-        if (excess <= 0) return;
+        if (!LIMIT_ENABLED) return;
 
-        try (PreparedStatement ps = conn.prepareStatement(TYPE.queryDeleteOldest())) {
-            ps.setQueryTimeout(TIMEOUT);
-            ps.setLong(1, excess);
-            ROWS_COUNT -= ps.executeUpdate();
+        try {
+            long count;
+            try (PreparedStatement ps = conn.prepareStatement(TYPE.queryCount())) {
+                ps.setQueryTimeout(TIMEOUT);
+                try (ResultSet rs = ps.executeQuery()) {
+                    count = rs.next() ? rs.getLong(1) : 0;
+                }
+            }
+
+            // Удаляем чанки, которые не обновлялись дольше всех
+            long excess = count - DATABASE_SIZE;
+            if (excess <= 0) return;
+
+            try (PreparedStatement ps = conn.prepareStatement(TYPE.queryDeleteOldest())) {
+                ps.setQueryTimeout(TIMEOUT);
+                ps.setLong(1, excess);
+                ps.executeUpdate();
+            }
         } catch (SQLException e) {
-            Console.error("Не получилось подрезать таблицу до %d записей!".formatted(DATABASE_SIZE), e);
+            Console.error("Не получилось подрезать таблицу до %d чанков!".formatted(DATABASE_SIZE), e);
         }
     }
 
-    private static void setPositionParams(PreparedStatement ps, Position pos) throws SQLException {
-        ps.setBytes(1, pos.world());
-        ps.setInt(2, pos.x());
-        ps.setInt(3, pos.y());
-        ps.setInt(4, pos.z());
+    private static void setKeyParams(PreparedStatement ps, ChunkKey key) throws SQLException {
+        ps.setBytes(1, key.world());
+        ps.setInt(2, key.x());
+        ps.setInt(3, key.z());
     }
 }

@@ -26,6 +26,10 @@ public class NaturalTrackerExpansion extends PlaceholderExpansion {
         if (!params.startsWith(HAS_PREFIX))
             return null;
 
+        // Кэш доступен только из главного потока, а PlaceholderAPI может вызывать плейсхолдеры асинхронно
+        if (!Bukkit.isPrimaryThread())
+            return null;
+
         Location location = parseLocation(PlaceholderAPI.setBracketPlaceholders(player, params.substring(HAS_PREFIX.length())));
         if (location == null)
             return null;

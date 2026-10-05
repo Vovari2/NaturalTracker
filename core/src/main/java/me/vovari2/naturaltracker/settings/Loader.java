@@ -18,20 +18,19 @@ final class Loader {
     Loader() throws Exception {
         config = FileUtils.loadYamlFile(RESOURCE_NAME);
 
-        Settings.CHANGES.MAX_SIZE = config.getInt("changes.max_size", 1_000_000);
-        Settings.CHANGES.BUFFER = config.getInt("changes.buffer", 10_000);
+        Settings.CHANGES.AUTOSAVE = config.getInt("changes.autosave", 300);
 
         Settings.DATABASE.TYPE = parseDatabaseType("database.type", DatabaseType.SQLITE);
         Settings.DATABASE.URL = parseDatabaseUrl("database.url");
         Settings.DATABASE.USER = config.getString("database.user", "root");
         Settings.DATABASE.PASSWORD = config.getString("database.password", "");
-        Settings.DATABASE.SIZE = config.getInt("database.size", 5_000_000);
-        Settings.DATABASE.TIMEOUT = config.getInt("database.timeout", 10);
-        Settings.DATABASE.BUFFER_SIZE = config.getInt("database.buffer_size", 100);
+        Settings.DATABASE.LIMIT = config.getBoolean("database.limit", true);
+        Settings.DATABASE.LIMIT_SIZE = config.getInt("database.limit_size", 100_000);
 
         Settings.DATABASE.POOL.MIN_SIZE = config.getInt("database.pool.min_size", 2);
         Settings.DATABASE.POOL.MAX_SIZE = config.getInt("database.pool.max_size", 10);
         Settings.DATABASE.POOL.TIMEOUT_TIME = config.getInt("database.pool.timeout_time", 10);
+        Settings.DATABASE.POOL.TIMEOUT_QUERY = config.getInt("database.pool.timeout_query", 10);
     }
     private @NotNull DatabaseType parseDatabaseType(@NotNull String path, @NotNull DatabaseType def){
         @Nullable String strType = config.getString(path);

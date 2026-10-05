@@ -8,76 +8,92 @@ public enum DatabaseType {
             "jdbc:sqlite:",
             "org.sqlite.JDBC",
             false,
-            "INSERT OR IGNORE INTO changes (world, x, y, z) VALUES (?, ?, ?, ?);",
-            "SELECT COUNT(id) FROM changes;",
-            "DELETE FROM changes WHERE id IN (SELECT id FROM changes ORDER BY id LIMIT ?);",
+            "SELECT data FROM chunks WHERE world = ? AND cx = ? AND cz = ?;",
+            "INSERT INTO chunks (world, cx, cz, data, updated) VALUES (?, ?, ?, ?, ?) ON CONFLICT (world, cx, cz) DO UPDATE SET data = excluded.data, updated = excluded.updated;",
+            "DELETE FROM chunks WHERE world = ? AND cx = ? AND cz = ?;",
+            "SELECT COUNT(*) FROM chunks;",
+            "DELETE FROM chunks WHERE (world, cx, cz) IN (SELECT world, cx, cz FROM chunks ORDER BY updated LIMIT ?);",
             """
-                CREATE TABLE IF NOT EXISTS changes (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                CREATE TABLE IF NOT EXISTS chunks (
                     world BLOB NOT NULL,
-                    x INTEGER NOT NULL,
-                    y INTEGER NOT NULL,
-                    z INTEGER NOT NULL,
-                    UNIQUE (world, x, y, z)
+                    cx INTEGER NOT NULL,
+                    cz INTEGER NOT NULL,
+                    data BLOB NOT NULL,
+                    updated INTEGER NOT NULL,
+                    PRIMARY KEY (world, cx, cz)
                 );
-            """
+            """,
+            "CREATE INDEX IF NOT EXISTS idx_chunks_updated ON chunks (updated);"
     ),
     MYSQL(
             "jdbc:mysql://",
             "com.mysql.cj.jdbc.Driver",
             true,
-            "INSERT IGNORE INTO changes (world, x, y, z) VALUES (?, ?, ?, ?);",
-            "SELECT COUNT(id) FROM changes;",
-            "DELETE FROM changes ORDER BY id LIMIT ?;",
+            "SELECT data FROM chunks WHERE world = ? AND cx = ? AND cz = ?;",
+            "INSERT INTO chunks (world, cx, cz, data, updated) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE data = VALUES(data), updated = VALUES(updated);",
+            "DELETE FROM chunks WHERE world = ? AND cx = ? AND cz = ?;",
+            "SELECT COUNT(*) FROM chunks;",
+            "DELETE FROM chunks ORDER BY updated LIMIT ?;",
             """
-                CREATE TABLE IF NOT EXISTS changes (
-                    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                CREATE TABLE IF NOT EXISTS chunks (
                     world BINARY(16) NOT NULL,
-                    x INT NOT NULL,
-                    y INT NOT NULL,
-                    z INT NOT NULL,
-                    UNIQUE KEY idx_position (world, x, y, z)
+                    cx INT NOT NULL,
+                    cz INT NOT NULL,
+                    data MEDIUMBLOB NOT NULL,
+                    updated BIGINT NOT NULL,
+                    PRIMARY KEY (world, cx, cz),
+                    INDEX idx_updated (updated)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-            """
+            """,
+            null
     ),
     POSTGRESQL(
             "jdbc:postgresql://",
             "org.postgresql.Driver",
             true,
-            "INSERT INTO changes (world, x, y, z) VALUES (?, ?, ?, ?) ON CONFLICT (world, x, y, z) DO NOTHING;",
-            "SELECT COUNT(id) FROM changes;",
-            "DELETE FROM changes WHERE id IN (SELECT id FROM changes ORDER BY id LIMIT ?);",
+            "SELECT data FROM chunks WHERE world = ? AND cx = ? AND cz = ?;",
+            "INSERT INTO chunks (world, cx, cz, data, updated) VALUES (?, ?, ?, ?, ?) ON CONFLICT (world, cx, cz) DO UPDATE SET data = excluded.data, updated = excluded.updated;",
+            "DELETE FROM chunks WHERE world = ? AND cx = ? AND cz = ?;",
+            "SELECT COUNT(*) FROM chunks;",
+            "DELETE FROM chunks WHERE (world, cx, cz) IN (SELECT world, cx, cz FROM chunks ORDER BY updated LIMIT ?);",
             """
-                CREATE TABLE IF NOT EXISTS changes (
-                    id BIGSERIAL PRIMARY KEY,
+                CREATE TABLE IF NOT EXISTS chunks (
                     world BYTEA NOT NULL,
-                    x INT NOT NULL,
-                    y INT NOT NULL,
-                    z INT NOT NULL,
-                    UNIQUE (world, x, y, z)
+                    cx INT NOT NULL,
+                    cz INT NOT NULL,
+                    data BYTEA NOT NULL,
+                    updated BIGINT NOT NULL,
+                    PRIMARY KEY (world, cx, cz)
                 )
-            """
+            """,
+            "CREATE INDEX IF NOT EXISTS idx_chunks_updated ON chunks (updated)"
     );
 
     private final String urlPrefix;
     private final String driverClass;
     private final boolean requiresCredentials;
-    private final String queryInsert;
+    private final String querySelect;
+    private final String queryUpsert;
+    private final String queryDelete;
     private final String queryCount;
     private final String queryDeleteOldest;
     private final String queryCreateTable;
+    private final @Nullable String queryCreateIndex;
 
     DatabaseType(String urlPrefix, String driverClass, boolean requiresCredentials,
-                 String queryInsert,
+                 String querySelect, String queryUpsert, String queryDelete,
                  String queryCount, String queryDeleteOldest,
-                 String queryCreateTable) {
+                 String queryCreateTable, @Nullable String queryCreateIndex) {
         this.urlPrefix = urlPrefix;
         this.driverClass = driverClass;
         this.requiresCredentials = requiresCredentials;
-        this.queryInsert = queryInsert;
+        this.querySelect = querySelect;
+        this.queryUpsert = queryUpsert;
+        this.queryDelete = queryDelete;
         this.queryCount = queryCount;
         this.queryDeleteOldest = queryDeleteOldest;
         this.queryCreateTable = queryCreateTable;
+        this.queryCreateIndex = queryCreateIndex;
     }
     public String buildUrl(String path) {
         return urlPrefix + path;
@@ -85,14 +101,13 @@ public enum DatabaseType {
 
     public String driverClass() { return driverClass; }
     public boolean requiresCredentials() { return requiresCredentials; }
-    public String queryInsert(){
-        return queryInsert;
-    }
+    public String querySelect() { return querySelect; }
+    public String queryUpsert() { return queryUpsert; }
+    public String queryDelete() { return queryDelete; }
     public String queryCount() { return queryCount; }
     public String queryDeleteOldest() { return queryDeleteOldest; }
-    public String queryCreateTable(){
-        return queryCreateTable;
-    }
+    public String queryCreateTable() { return queryCreateTable; }
+    public @Nullable String queryCreateIndex() { return queryCreateIndex; }
 
 
 
