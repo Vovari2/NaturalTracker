@@ -12,7 +12,10 @@ public enum Messages {
 
     RELOAD_SUCCESS("<#54B435>Плагин был перезагружен! ({time} ms)"),
     INSPECT_SUCCESS("<gradient:#54B435:#82CD47>Выдан инспектор для блоков плагина!"),
-    INSPECT_INVENTORY_FULL("<red>Не удалось выдать инспектор, инвентарь заполнен!");
+    INSPECT_INVENTORY_FULL("<red>Не удалось выдать инспектор, инвентарь заполнен!"),
+    INSPECT_CHUNK_LOADING("<yellow>Данные чанка ещё загружаются, попробуйте снова!"),
+    INSPECT_GENERATED("<green>Блок был сгенерирован!"),
+    INSPECT_CHANGED("<red>Блок не был сгенерирован!");
 
     private Message message;
     Messages(String message){

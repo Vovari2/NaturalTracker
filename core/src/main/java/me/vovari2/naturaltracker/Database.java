@@ -10,6 +10,7 @@ import me.vovari2.naturaltracker.changes.ChunkEntry;
 import me.vovari2.naturaltracker.changes.ChunkKey;
 import me.vovari2.naturaltracker.changes.ChunkSnapshot;
 import me.vovari2.naturaltracker.settings.Settings;
+import me.vovari2.naturaltracker.utils.UUIDUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.*;
@@ -69,9 +70,11 @@ public class Database {
                         .connectionFactoryConfiguration( cf -> {
                             cf.jdbcUrl(jdbcUrl)
                                     .connectionProviderClassName(type.driverClass())
-                                    .jdbcTransactionIsolation(AgroalConnectionFactoryConfiguration.TransactionIsolation.SERIALIZABLE)
-                                    .principal( new NamePrincipal(Settings.DATABASE.USER) )
-                                    .credential(new SimplePassword(Settings.DATABASE.PASSWORD));
+                                    .jdbcTransactionIsolation(AgroalConnectionFactoryConfiguration.TransactionIsolation.SERIALIZABLE);
+
+                            if (type.requiresCredentials())
+                                cf.principal(new NamePrincipal(Settings.DATABASE.USER))
+                                        .credential(new SimplePassword(Settings.DATABASE.PASSWORD));
 
                             if (type == DatabaseType.SQLITE)
                                 cf.initialSql("PRAGMA journal_mode = WAL;");
@@ -114,9 +117,10 @@ public class Database {
             return data == null ? null : ChunkEntry.decode(data);
         }
     }
-    /** Только из потока воркера. Вся пачка пишется одной транзакцией. */
-    public static void saveChunks(List<ChunkSnapshot> snapshots) {
-        if (DATA_SOURCE == null || snapshots.isEmpty()) return;
+    /** Только из потока воркера. Вся пачка пишется одной транзакцией. false, если записать не получилось. */
+    public static boolean saveChunks(List<ChunkSnapshot> snapshots) {
+        if (snapshots.isEmpty()) return true;
+        if (DATA_SOURCE == null) return false;
 
         try (Connection conn = DATA_SOURCE.getConnection()) {
             conn.setAutoCommit(false);
@@ -128,14 +132,16 @@ public class Database {
             } catch (Exception e) {
                 conn.rollback();
                 Console.error("Не получилось записать %d чанков в БД!".formatted(snapshots.size()), e);
-                return;
+                return false;
             } finally {
                 conn.setAutoCommit(true);
             }
 
             enforceSizeLimit(conn);
+            return true;
         } catch (SQLException e) {
             Console.error("Не получилось сохранить чанки в БД!", e);
+            return false;
         }
     }
 
@@ -207,7 +213,7 @@ public class Database {
     }
 
     private static void setKeyParams(PreparedStatement ps, ChunkKey key) throws SQLException {
-        ps.setBytes(1, key.world());
+        ps.setBytes(1, UUIDUtils.toBytes(key.world()));
         ps.setInt(2, key.x());
         ps.setInt(3, key.z());
     }

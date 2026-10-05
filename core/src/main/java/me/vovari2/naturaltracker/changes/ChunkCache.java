@@ -20,7 +20,7 @@ import java.util.Map;
  * Изменённые блоки по чанкам. Чанк живёт в кэше, пока загружен: данные подгружаются из БД при загрузке чанка
  * и сохраняются при его выгрузке и периодически.
  * <p>
- * Все методы, работающие с кэшем (log, has, isReady, события чанков), вызываются ТОЛЬКО из главного потока:
+ * Все методы, работающие с кэшем (onBlockChange, wasChanged, changeIsAccurate, события чанков), вызываются ТОЛЬКО из главного потока:
  * ни карта чанков, ни {@link ChunkEntry} не потокобезопасны. С БД работает отдельный воркер, которому
  * передаются уже готовые копии данных.
  */
@@ -43,13 +43,15 @@ public class ChunkCache {
             Console.error("Не получилось записать изменение блока, кэш не инициализирован! (location=%s)".formatted(loc));
             return;
         }
-        if (!isPrimaryThread("log")) return;
+        if (!isPrimaryThread("onBlockChange")) return;
 
         World world = loc.getWorld();
         int index = ChunkEntry.index(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), world.getMinHeight(), world.getMaxHeight());
         if (index < 0) return;
 
-        c.map.computeIfAbsent(ChunkKey.of(loc), k -> new ChunkEntry()).set(index);
+        // Записи нет у выгруженного чанка (например, у соседнего при работе поршня на границе): блок там не изменится
+        ChunkEntry entry = c.map.get(ChunkKey.of(loc));
+        if (entry != null) entry.set(index);
     }
     /**
      * Только главный поток (из других потоков вернёт false).
@@ -58,7 +60,7 @@ public class ChunkCache {
     public static boolean wasChanged(Location loc) {
         final ChunkCache c = IMP;
         if (c == null) return false;
-        if (!isPrimaryThread("has")) return false;
+        if (!isPrimaryThread("wasChanged")) return false;
 
         World world = loc.getWorld();
         int index = ChunkEntry.index(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), world.getMinHeight(), world.getMaxHeight());
@@ -71,7 +73,7 @@ public class ChunkCache {
     public static boolean changeIsAccurate(Location location) {
         ChunkCache c = IMP;
         if (c == null) return false;
-        if (!isPrimaryThread("isReady")) return false;
+        if (!isPrimaryThread("changeIsAccurate")) return false;
 
         ChunkEntry entry = c.map.get(ChunkKey.of(location));
         return entry != null && entry.isLoaded();
@@ -81,7 +83,7 @@ public class ChunkCache {
 
         if (!ASYNC_WARNED) {
             ASYNC_WARNED = true;
-            Console.warn("ChangesCache.%s вызван не из главного потока, вызов проигнорирован!".formatted(method), new IllegalStateException());
+            Console.warn("ChunkCache.%s вызван не из главного потока, вызов проигнорирован!".formatted(method), new IllegalStateException());
         }
         return false;
     }
@@ -103,12 +105,11 @@ public class ChunkCache {
 
         c.worker.execute(() -> {
             BitSet stored = null;
-            boolean success = true;
             try {
                 stored = Database.loadChunk(key);
             } catch (Exception e) {
-                success = false;
-                Console.error("Не получилось загрузить чанк %s из БД!".formatted(key), e);
+                // Чанк считается новым, чтобы не блокировать инспектор и запись изменений
+                Console.error("Не получилось загрузить чанк %s из БД! Чанк загружен в кэш как новый!".formatted(key), e);
             }
 
             // Плагин выключился, пока шла загрузка
@@ -116,13 +117,12 @@ public class ChunkCache {
             if (!plugin.isEnabled()) return;
 
             BitSet finalStored = stored;
-            boolean finalSuccess = success;
             Bukkit.getScheduler().runTask(plugin, () -> {
                 // Чанк уже выгрузился, пока шла загрузка
                 if (c.map.get(key) != entry) return;
 
                 if (finalStored != null) entry.merge(finalStored);
-                if (finalSuccess) entry.loaded = true;
+                entry.loaded = true;
             });
         });
     }
@@ -134,8 +134,7 @@ public class ChunkCache {
         ChunkEntry entry = c.map.remove(key);
         if (entry == null || !entry.dirty) return;
 
-        List<ChunkSnapshot> snapshots = List.of(ChunkSnapshot.of(key, entry));
-        c.worker.execute(() -> Database.saveChunks(snapshots));
+        c.saveChunks(List.of(ChunkSnapshot.of(key, entry)));
     }
 
     public static synchronized void enable() {
@@ -197,6 +196,22 @@ public class ChunkCache {
         });
         if (snapshots.isEmpty()) return;
 
-        worker.execute(() -> Database.saveChunks(snapshots));
+        saveChunks(snapshots);
+    }
+    private void saveChunks(List<ChunkSnapshot> snapshots) {
+        worker.execute(() -> {
+            if (Database.saveChunks(snapshots)) return;
+
+            // Возвращаем флаг, чтобы следующее автосохранение повторило запись
+            NaturalTracker plugin = NaturalTracker.getInstance();
+            if (!plugin.isEnabled()) return;
+
+            Bukkit.getScheduler().runTask(plugin, () -> {
+                for (ChunkSnapshot snapshot : snapshots) {
+                    ChunkEntry entry = map.get(snapshot.key());
+                    if (entry != null) entry.dirty = true;
+                }
+            });
+        });
     }
 }
