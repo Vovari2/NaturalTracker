@@ -24,23 +24,13 @@ public class Database {
     private static int DATABASE_SIZE;
 
     private static final Set<Position> BUFFER = new HashSet<>();
-
-    // Число строк в таблице: COUNT считается один раз при создании пула, дальше ведётся вручную
-    private static long ROWS;
+    private static long ROWS_COUNT;
 
     public static void enable() {
         initialize();
     }
     public static void reload() {
-        // Закрываем старый источник данных, если он был, при этом сохраняя буффер в БД
-        if (DATA_SOURCE != null) {
-            flushRemaining();
-            try {
-                DATA_SOURCE.close();
-            } catch (Exception e) {
-                Console.warn("Не получилось закрыть старый источник данных!", e);
-            }
-        }
+        disable();
         initialize();
     }
     public static void disable() {
@@ -48,9 +38,9 @@ public class Database {
             flushRemaining();
             try {
                 DATA_SOURCE.close();
-                Console.info("Источник данных успешно закрыт.");
+                Console.info("Источник данных успешно закрыт!");
             } catch (Exception e) {
-                Console.warn("Ошибка при закрытии: ", e);
+                Console.warn("Не получилось закрыть старый источник данных!", e);
             }
         }
     }
@@ -81,9 +71,9 @@ public class Database {
                                     .principal( new NamePrincipal(Settings.DATABASE.USER) )
                                     .credential(new SimplePassword(Settings.DATABASE.PASSWORD));
 
-                            // sqlite-jdbc выполняет только первый оператор, поэтому одна PRAGMA (внешних ключей в схеме нет)
                             if (type == DatabaseType.SQLITE)
                                 cf.initialSql("PRAGMA journal_mode = WAL;");
+
                             return cf;
                         })
                 );
@@ -97,7 +87,7 @@ public class Database {
                 }
                 try (Statement stmt = conn.createStatement();
                      ResultSet rs = stmt.executeQuery(type.queryCount())) {
-                    ROWS = rs.next() ? rs.getLong(1) : 0;
+                    ROWS_COUNT = rs.next() ? rs.getLong(1) : 0;
                 }
                 Console.info("Таблицы в базе данных успешно инициализированы!");
 
@@ -112,14 +102,6 @@ public class Database {
             Console.error("Не удалось инициализировать базу данных!", e);
         }
     }
-    private static void flushRemaining() {
-        if (DATA_SOURCE == null) return;
-        try (Connection conn = DATA_SOURCE.getConnection()) {
-            flush(conn);
-        } catch (SQLException e) {
-            Console.error("Не получилось сбросить буфер БД!", e);
-        }
-    }
 
     public static void insertPosition(Position pos){
         if (DATA_SOURCE == null)
@@ -129,17 +111,23 @@ public class Database {
         if (BUFFER.size() >= BUFFER_SIZE)
             flushRemaining();
     }
+    private static void flushRemaining() {
+        if (DATA_SOURCE == null) return;
+        try (Connection conn = DATA_SOURCE.getConnection()) {
+            if (BUFFER.isEmpty()) return;
 
-    private static void flush(Connection conn) {
-        if (BUFFER.isEmpty()) return;
+            // Делаем снимок и очищаем буфер до записи.
+            // Если insertBatch упадёт — данные потеряются. Это осознанное решение: потеря нескольких позиций допустима.
+            Set<Position> snapshot = new HashSet<>(BUFFER);
+            BUFFER.clear();
 
-        // Делаем снимок и очищаем буфер до записи.
-        // Если insertBatch упадёт — данные потеряются. Это осознанное решение: потеря нескольких позиций допустима.
-        Set<Position> snapshot = new HashSet<>(BUFFER);
-        BUFFER.clear();
-
-        insertBatch(conn, snapshot);
+            insertBatch(conn, snapshot);
+            enforceSizeLimit(conn);
+        } catch (SQLException e) {
+            Console.error("Не получилось сбросить буфер БД!", e);
+        }
     }
+
     private static void insertBatch(Connection conn, Set<Position> batch) {
         if (batch.isEmpty()) return;
 
@@ -152,23 +140,21 @@ public class Database {
             // Дубликаты игнорируются БД и возвращают 0, поэтому считаем только реально вставленные строки
             for (int result : ps.executeBatch())
                 if (result > 0 || result == Statement.SUCCESS_NO_INFO)
-                    ROWS++;
+                    ROWS_COUNT++;
 
         } catch (SQLException e) {
             Console.error("Не получилось записать %s позиций в БД!".formatted(batch.size()), e);
         }
-
-        enforceSizeLimit(conn);
     }
     private static void enforceSizeLimit(Connection conn) {
         // Когда таблица заполнена, удаляем столько старых строк, сколько только что вставили
-        long excess = ROWS - DATABASE_SIZE;
+        long excess = ROWS_COUNT - DATABASE_SIZE;
         if (excess <= 0) return;
 
         try (PreparedStatement ps = conn.prepareStatement(TYPE.queryDeleteOldest())) {
             ps.setQueryTimeout(TIMEOUT);
             ps.setLong(1, excess);
-            ROWS -= ps.executeUpdate();
+            ROWS_COUNT -= ps.executeUpdate();
         } catch (SQLException e) {
             Console.error("Не получилось подрезать таблицу до %d записей!".formatted(DATABASE_SIZE), e);
         }
