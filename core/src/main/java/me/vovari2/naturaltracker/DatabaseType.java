@@ -9,40 +9,40 @@ public enum DatabaseType {
             "org.sqlite.JDBC",
             false,
             "SELECT data FROM chunks WHERE world = ? AND cx = ? AND cz = ?;",
-            "INSERT INTO chunks (world, cx, cz, data, updated) VALUES (?, ?, ?, ?, ?) ON CONFLICT (world, cx, cz) DO UPDATE SET data = excluded.data, updated = excluded.updated;",
+            "INSERT INTO chunks (world, cx, cz, data, timestamp) VALUES (?, ?, ?, ?, ?) ON CONFLICT (world, cx, cz) DO UPDATE SET data = excluded.data, timestamp = excluded.timestamp;",
             "DELETE FROM chunks WHERE world = ? AND cx = ? AND cz = ?;",
             "SELECT COUNT(*) FROM chunks;",
-            "DELETE FROM chunks WHERE (world, cx, cz) IN (SELECT world, cx, cz FROM chunks ORDER BY updated LIMIT ?);",
+            "DELETE FROM chunks WHERE (world, cx, cz) IN (SELECT world, cx, cz FROM chunks ORDER BY timestamp LIMIT ?);",
             """
                 CREATE TABLE IF NOT EXISTS chunks (
                     world BLOB NOT NULL,
                     cx INTEGER NOT NULL,
                     cz INTEGER NOT NULL,
                     data BLOB NOT NULL,
-                    updated INTEGER NOT NULL,
+                    timestamp INTEGER NOT NULL,
                     PRIMARY KEY (world, cx, cz)
                 );
             """,
-            "CREATE INDEX IF NOT EXISTS idx_chunks_updated ON chunks (updated);"
+            "CREATE INDEX IF NOT EXISTS idx_chunks_timestamp ON chunks (timestamp);"
     ),
     MYSQL(
             "jdbc:mysql://",
             "com.mysql.cj.jdbc.Driver",
             true,
             "SELECT data FROM chunks WHERE world = ? AND cx = ? AND cz = ?;",
-            "INSERT INTO chunks (world, cx, cz, data, updated) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE data = VALUES(data), updated = VALUES(updated);",
+            "INSERT INTO chunks (world, cx, cz, data, timestamp) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE data = VALUES(data), timestamp = VALUES(timestamp);",
             "DELETE FROM chunks WHERE world = ? AND cx = ? AND cz = ?;",
             "SELECT COUNT(*) FROM chunks;",
-            "DELETE FROM chunks ORDER BY updated LIMIT ?;",
+            "DELETE FROM chunks ORDER BY timestamp LIMIT ?;",
             """
                 CREATE TABLE IF NOT EXISTS chunks (
                     world BINARY(16) NOT NULL,
                     cx INT NOT NULL,
                     cz INT NOT NULL,
                     data MEDIUMBLOB NOT NULL,
-                    updated BIGINT NOT NULL,
+                    timestamp BIGINT NOT NULL,
                     PRIMARY KEY (world, cx, cz),
-                    INDEX idx_updated (updated)
+                    INDEX idx_timestamp (timestamp)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
             """,
             null
@@ -52,21 +52,21 @@ public enum DatabaseType {
             "org.postgresql.Driver",
             true,
             "SELECT data FROM chunks WHERE world = ? AND cx = ? AND cz = ?;",
-            "INSERT INTO chunks (world, cx, cz, data, updated) VALUES (?, ?, ?, ?, ?) ON CONFLICT (world, cx, cz) DO UPDATE SET data = excluded.data, updated = excluded.updated;",
+            "INSERT INTO chunks (world, cx, cz, data, timestamp) VALUES (?, ?, ?, ?, ?) ON CONFLICT (world, cx, cz) DO UPDATE SET data = excluded.data, timestamp = excluded.timestamp;",
             "DELETE FROM chunks WHERE world = ? AND cx = ? AND cz = ?;",
             "SELECT COUNT(*) FROM chunks;",
-            "DELETE FROM chunks WHERE (world, cx, cz) IN (SELECT world, cx, cz FROM chunks ORDER BY updated LIMIT ?);",
+            "DELETE FROM chunks WHERE (world, cx, cz) IN (SELECT world, cx, cz FROM chunks ORDER BY timestamp LIMIT ?);",
             """
                 CREATE TABLE IF NOT EXISTS chunks (
                     world BYTEA NOT NULL,
                     cx INT NOT NULL,
                     cz INT NOT NULL,
                     data BYTEA NOT NULL,
-                    updated BIGINT NOT NULL,
+                    timestamp BIGINT NOT NULL,
                     PRIMARY KEY (world, cx, cz)
                 )
             """,
-            "CREATE INDEX IF NOT EXISTS idx_chunks_updated ON chunks (updated)"
+            "CREATE INDEX IF NOT EXISTS idx_chunks_timestamp ON chunks (timestamp)"
     );
 
     private final String urlPrefix;
