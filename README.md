@@ -100,7 +100,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("com.github.Vovari2.NaturalTracker:NaturalTracker:Tag")
+    compileOnly("com.github.Vovari2.NaturalTracker:api:Tag")
 }
 ```
 
@@ -113,7 +113,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'com.github.Vovari2.NaturalTracker:NaturalTracker:Tag'
+    compileOnly 'com.github.Vovari2.NaturalTracker:api:Tag'
 }
 ```
 
@@ -129,7 +129,7 @@ dependencies {
 
 <dependency>
     <groupId>com.github.Vovari2.NaturalTracker</groupId>
-    <artifactId>NaturalTracker</artifactId>
+    <artifactId>api</artifactId>
     <version>Tag</version>
     <scope>provided</scope>
 </dependency>
