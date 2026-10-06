@@ -152,9 +152,7 @@ public class Database {
         if (snapshot.merge()) {
             byte[] old = selectChunk(conn, key);
             if (old != null) {
-                BitSet merged = ChunkEntry.decode(old);
-                merged.or(BitSet.valueOf(raw));
-                raw = merged.toByteArray();
+                raw = ChunkEntry.overlay(BitSet.valueOf(raw), ChunkEntry.decode(old)).toByteArray();
             }
         }
 

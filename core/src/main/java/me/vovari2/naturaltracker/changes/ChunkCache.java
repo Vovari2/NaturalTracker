@@ -20,7 +20,7 @@ import java.util.Map;
  * Изменённые блоки по чанкам. Чанк живёт в кэше, пока загружен: данные подгружаются из БД при загрузке чанка
  * и сохраняются при его выгрузке и периодически.
  * <p>
- * Все методы, работающие с кэшем (onBlockChange, wasChanged, changeIsAccurate, события чанков), вызываются ТОЛЬКО из главного потока:
+ * Все методы, работающие с кэшем (onBlockPlace, onBlockDestroy, stateOf, changeIsAccurate, события чанков), вызываются ТОЛЬКО из главного потока:
  * ни карта чанков, ни {@link ChunkEntry} не потокобезопасны. С БД работает отдельный воркер, которому
  * передаются уже готовые копии данных.
  */
@@ -37,13 +37,17 @@ public class ChunkCache {
     }
 
     /** Только главный поток. */
-    public static void onBlockChange(Location loc) {
+    public static void onBlockPlace(Location loc) { onBlockChange(loc, true, "onBlockPlace"); }
+    /** Только главный поток. */
+    public static void onBlockDestroy(Location loc) { onBlockChange(loc, false, "onBlockDestroy"); }
+
+    private static void onBlockChange(Location loc, boolean placed, String method) {
         ChunkCache c = IMP;
         if (c == null) {
             Console.error("Не получилось записать изменение блока, кэш не инициализирован! (location=%s)".formatted(loc));
             return;
         }
-        if (!isPrimaryThread("onBlockChange")) return;
+        if (!isPrimaryThread(method)) return;
 
         World world = loc.getWorld();
         int index = ChunkEntry.index(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), world.getMinHeight(), world.getMaxHeight());
@@ -51,25 +55,28 @@ public class ChunkCache {
 
         // Записи нет у выгруженного чанка (например, у соседнего при работе поршня на границе): блок там не изменится
         ChunkEntry entry = c.map.get(ChunkKey.of(loc));
-        if (entry != null) entry.set(index);
+        if (entry == null) return;
+
+        if (placed) entry.setPlaced(index);
+        else entry.setDestroyed(index);
     }
     /**
-     * Только главный поток (из других потоков вернёт false).
+     * Только главный поток (из других потоков вернёт GENERATED).
      * Смотрит только кэш, без обращения к БД: пока данные чанка не подгрузились ({@link #changeIsAccurate}), ответ может быть неточным.
      */
-    public static boolean wasChanged(Location loc) {
+    public static BlockState stateOf(Location loc) {
         final ChunkCache c = IMP;
-        if (c == null) return false;
-        if (!isPrimaryThread("wasChanged")) return false;
+        if (c == null) return BlockState.GENERATED;
+        if (!isPrimaryThread("stateOf")) return BlockState.GENERATED;
 
         World world = loc.getWorld();
         int index = ChunkEntry.index(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), world.getMinHeight(), world.getMaxHeight());
-        if (index < 0) return false;
+        if (index < 0) return BlockState.GENERATED;
 
         ChunkEntry entry = c.map.get(ChunkKey.of(loc));
-        return entry != null && entry.has(index);
+        return entry == null ? BlockState.GENERATED : entry.state(index);
     }
-    /** Только главный поток. true, если данные чанка из БД уже подгружены и has() точен. */
+    /** Только главный поток. true, если данные чанка из БД уже подгружены и stateOf() точен. */
     public static boolean changeIsAccurate(Location location) {
         ChunkCache c = IMP;
         if (c == null) return false;

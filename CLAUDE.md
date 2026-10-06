@@ -21,8 +21,8 @@
 | `NaturalTrackerCommand` | `BukkitCommand` `/naturaltracker` (алиас `/nt`), регистрируется через `getCommandMap()`; проверяет `naturaltracker.admin` и по `args[0]` создаёт подкоманду |
 | `Console` | Статический логгер, принимает строки MiniMessage |
 | `Database`, `DatabaseType` | Пул соединений; `loadChunk` / `saveChunks` (пачка в одной транзакции, вызываются только из воркера); необязательное ограничение числа чанков в таблице (`database.limit`), удаляются давно не обновлявшиеся; SQL для каждого типа БД лежит в enum |
-| `changes/ChunkCache` | Синглтон-кэш `HashMap<ChunkKey, ChunkEntry>`. **`onBlockChange` / `wasChanged` / `changeIsAccurate` и события чанков — только из главного потока** (из других потоков игнорируются). Загрузка из БД при `ChunkLoadEvent` (асинхронно, результат подмешивается в главном потоке), сохранение при выгрузке и по таймеру `changes.autosave` (при неудачной записи `dirty` возвращается). Если загрузка из БД упала — ошибка в консоль, чанк считается новым |
-| `changes/ChunkEntry` | `BitSet` изменённых блоков чанка (индекс `((y - minY) << 8) \| (z << 4) \| x`), флаги `loaded` / `dirty`; сжатие Deflate |
+| `changes/ChunkCache` | Синглтон-кэш `HashMap<ChunkKey, ChunkEntry>`. **`onBlockPlace` / `onBlockDestroy` / `stateOf` / `changeIsAccurate` и события чанков — только из главного потока** (из других потоков игнорируются). Загрузка из БД при `ChunkLoadEvent` (асинхронно, результат подмешивается в главном потоке), сохранение при выгрузке и по таймеру `changes.autosave` (при неудачной записи `dirty` возвращается). Если загрузка из БД упала — ошибка в консоль, чанк считается новым |
+| `changes/ChunkEntry` | Один `BitSet` на чанк, два соседних бита на блок (индекс блока `((y - minY) << 8) \| (z << 4) \| x`): бит `2*index` — изменён, `2*index+1` — поставлен (1) / уничтожен (0). Состояние — `BlockState` (`GENERATED` / `PLACED` / `DESTROYED`). Флаги `loaded` / `dirty`; сжатие Deflate (миграции со старого формата БД с одним битом на блок нет, папку плагина удаляют при установке); `overlay` — слияние, где новое перекрывает старое |
 | `changes/ChunkKey` | Ключ чанка: UUID мира + cx/cz (в БД UUID пишется как `byte[16]`) |
 | `changes/ChunkSnapshot` | Копия битов для записи; `merge = true`, если данные из БД не успели подгрузиться (воркер подмешает старые перед записью) |
 | `changes/SerialWorker` | Один фоновый поток с ограниченной очередью задач (при переполнении ждёт место, `close()` дописывает очередь до конца) |
@@ -30,7 +30,7 @@
 | `commands/` | Подкоманды — наследники абстрактного `Command(instance, sender, args)` с `boolean execute()`; `ReloadCommand` (`reload`), `InspectorCommand` (`inspect`, выдаёт предмет-инспектор) |
 | `messages/` | `Messages` — enum сообщений MiniMessage с плейсхолдерами `{name}` (`.replace(...).send(sender)`); `Loader` читает и дописывает `messages.json` в папке плагина |
 | `settings/` | `Settings` — статические поля во вложенных классах; `Loader` читает `settings.yml` |
-| `placeholders/` | `NaturalTrackerExpansion` — PlaceholderAPI (softdepend): `%naturaltracker_has_<world>_<x>_<y>_<z>%` → `wasChanged`; `{...}` внутри раскрываются как плейсхолдеры, разбор координат справа |
+| `placeholders/` | `NaturalTrackerExpansion` — PlaceholderAPI (softdepend): `%naturaltracker_<generated\|placed\|destroyed>_<world>_<x>_<y>_<z>%` → `ChunkCache.stateOf`; `{...}` внутри раскрываются как плейсхолдеры, разбор координат справа |
 | `utils/` | `FileUtils` (YAML/JSON), `TextUtils.toComponent` (MiniMessage) |
 
 Модуль `api` содержит копию `NaturalTrackerAPI` и зависит от `core` как `compileOnly`.

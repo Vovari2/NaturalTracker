@@ -37,8 +37,12 @@ public class InspectorListener implements Listener {
             return;
         }
 
-        boolean wasGenerated = !ChunkCache.wasChanged(block.getLocation());
-        (wasGenerated ? Messages.INSPECT_GENERATED : Messages.INSPECT_CHANGED).send(event.getPlayer());
+        Messages message = switch (ChunkCache.stateOf(block.getLocation())) {
+            case GENERATED -> Messages.INSPECT_GENERATED;
+            case PLACED -> Messages.INSPECT_PLACED;
+            case DESTROYED -> Messages.INSPECT_DESTROYED;
+        };
+        message.send(event.getPlayer());
         event.setCancelled(true);
     }
 }

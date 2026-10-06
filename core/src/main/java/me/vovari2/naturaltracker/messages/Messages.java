@@ -15,7 +15,8 @@ public enum Messages {
     INSPECT_INVENTORY_FULL("<red>Не удалось выдать инспектор, инвентарь заполнен!"),
     INSPECT_CHUNK_LOADING("<yellow>Данные чанка ещё загружаются, попробуйте снова!"),
     INSPECT_GENERATED("<green>Блок был сгенерирован!"),
-    INSPECT_CHANGED("<red>Блок не был сгенерирован!");
+    INSPECT_PLACED("<red>Блок был поставлен!"),
+    INSPECT_DESTROYED("<red>Блок был уничтожен!");
 
     private Message message;
     Messages(String message){

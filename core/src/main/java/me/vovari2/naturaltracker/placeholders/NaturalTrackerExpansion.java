@@ -4,7 +4,8 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.PlaceholderAPIPlugin;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.vovari2.naturaltracker.NaturalTracker;
-import me.vovari2.naturaltracker.NaturalTrackerAPI;
+import me.vovari2.naturaltracker.changes.BlockState;
+import me.vovari2.naturaltracker.changes.ChunkCache;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -15,26 +16,30 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Locale;
 
 public class NaturalTrackerExpansion extends PlaceholderExpansion {
-    private static final String HAS_PREFIX = "has_";
-
     public @NotNull String getIdentifier() { return NaturalTracker.getPluginName().toLowerCase(Locale.ROOT); }
     public @NotNull String getAuthor() { return NaturalTracker.getAuthors(); }
     public @NotNull String getVersion() { return NaturalTracker.getVersion(); }
     public boolean persist() { return true; }
 
     public @Nullable String onRequest(OfflinePlayer player, @NotNull String params){
-        if (!params.startsWith(HAS_PREFIX))
+        // <generated|placed|destroyed>_<world>_<x>_<y>_<z>
+        int separator = params.indexOf('_');
+        if (separator <= 0)
+            return null;
+
+        BlockState expected = BlockState.of(params.substring(0, separator));
+        if (expected == null)
             return null;
 
         // Кэш доступен только из главного потока, а PlaceholderAPI может вызывать плейсхолдеры асинхронно
         if (!Bukkit.isPrimaryThread())
             return null;
 
-        Location location = parseLocation(PlaceholderAPI.setBracketPlaceholders(player, params.substring(HAS_PREFIX.length())));
+        Location location = parseLocation(PlaceholderAPI.setBracketPlaceholders(player, params.substring(separator + 1)));
         if (location == null)
             return null;
 
-        return NaturalTrackerAPI.wasGenerated(location) ? PlaceholderAPIPlugin.booleanTrue() : PlaceholderAPIPlugin.booleanFalse();
+        return ChunkCache.stateOf(location) == expected ? PlaceholderAPIPlugin.booleanTrue() : PlaceholderAPIPlugin.booleanFalse();
     }
 
     // Разбор справа: имя мира может содержать "_"

@@ -16,14 +16,14 @@ public class BlockListener implements Listener {
     public void onPlayerPlaceBlock(BlockPlaceEvent event){
         if (event.isCancelled())
             return;
-        ChunkCache.onBlockChange(event.getBlock().getLocation());
+        ChunkCache.onBlockPlace(event.getBlock().getLocation());
     }
     @EventHandler(priority=EventPriority.MONITOR)
     public void onPlayerBreakBlock(BlockBreakEvent event){
         if (event.isCancelled())
             return;
 
-        ChunkCache.onBlockChange(event.getBlock().getLocation());
+        ChunkCache.onBlockDestroy(event.getBlock().getLocation());
     }
     @EventHandler(priority=EventPriority.MONITOR)
     public void onPistonExtend(BlockPistonExtendEvent event){
@@ -33,8 +33,9 @@ public class BlockListener implements Listener {
         BlockFace face = event.getDirection();
         for (int i = event.getBlocks().size() - 1; i >= 0; i--){
             Location location = event.getBlocks().get(i).getLocation();
-            ChunkCache.onBlockChange(location);
-            ChunkCache.onBlockChange(location.clone().add(face.getModX(), face.getModY(), face.getModZ()));
+            // Сначала источник, потом цель: клетка в середине цепочки — и то и другое, итоговым должно остаться «поставлен»
+            ChunkCache.onBlockDestroy(location);
+            ChunkCache.onBlockPlace(location.clone().add(face.getModX(), face.getModY(), face.getModZ()));
         }
     }
     @EventHandler(priority=EventPriority.MONITOR)
@@ -45,8 +46,9 @@ public class BlockListener implements Listener {
         BlockFace face = event.getDirection();
         for (int i = event.getBlocks().size() - 1; i >= 0; i--){
             Location location = event.getBlocks().get(i).getLocation();
-            ChunkCache.onBlockChange(location);
-            ChunkCache.onBlockChange(location.clone().add(face.getModX(), face.getModY(), face.getModZ()));
+            // Сначала источник, потом цель: клетка в середине цепочки — и то и другое, итоговым должно остаться «поставлен»
+            ChunkCache.onBlockDestroy(location);
+            ChunkCache.onBlockPlace(location.clone().add(face.getModX(), face.getModY(), face.getModZ()));
         }
     }
 }

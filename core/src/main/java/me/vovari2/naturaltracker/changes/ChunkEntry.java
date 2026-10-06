@@ -10,23 +10,48 @@ import java.util.zip.Inflater;
 
 /** Изменённые блоки одного чанка. Используется только из главного потока. */
 public final class ChunkEntry {
-    // Индекс бита: ((y - minY) << 8) | (z << 4) | x, где x и z — координаты внутри чанка
+    // Индекс блока: ((y - minY) << 8) | (z << 4) | x, где x и z — координаты внутри чанка.
+    // На блок два соседних бита: 2 * index — изменён, 2 * index + 1 — поставлен (1) или уничтожен (0); второй бит значим только у изменённого
     private final BitSet bits = new BitSet();
 
     boolean requested; // Загрузка из БД уже запрошена (повторно не запрашиваем)
     boolean loaded; // Данные из БД уже подмешены
     boolean dirty; // Есть изменения, которых ещё нет в БД
 
-    public boolean has(int index) { return bits.get(index); }
-    public void set(int index) {
-        bits.set(index);
+    public BlockState state(int index) {
+        int bit = index << 1;
+        if (!bits.get(bit)) return BlockState.GENERATED;
+        return bits.get(bit + 1) ? BlockState.PLACED : BlockState.DESTROYED;
+    }
+    public void setPlaced(int index) {
+        int bit = index << 1;
+        bits.set(bit, bit + 2);
+        dirty = true;
+    }
+    public void setDestroyed(int index) {
+        int bit = index << 1;
+        bits.set(bit);
+        bits.clear(bit + 1);
         dirty = true;
     }
     public boolean isLoaded() { return loaded; }
 
-    // OR, чтобы не затереть изменения, залогированные пока шла загрузка
-    void merge(@NotNull BitSet other) { bits.or(other); }
+    // Блоки, изменённые пока шла загрузка, новее данных из БД и не затираются ими
+    void merge(@NotNull BitSet stored) {
+        BitSet merged = overlay(bits, stored);
+        bits.clear();
+        bits.or(merged);
+    }
     byte[] toBytes() { return bits.toByteArray(); }
+
+    /** Состояния блоков из newer перекрывают состояния тех же блоков из older. */
+    public static BitSet overlay(BitSet newer, BitSet older) {
+        BitSet result = (BitSet) older.clone();
+        for (int i = newer.nextSetBit(0); i >= 0; i = newer.nextSetBit((i | 1) + 1))
+            result.clear(i & ~1, (i & ~1) + 2);
+        result.or(newer);
+        return result;
+    }
 
     public static int index(int x, int y, int z, int minY, int maxY) {
         if (y < minY || y >= maxY) return -1;
