@@ -1,6 +1,8 @@
 package me.vovari2.naturaltracker.listeners;
 
 import me.vovari2.naturaltracker.changes.ChunkCache;
+import me.vovari2.naturaltracker.events.NaturallyBlockBreakEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
@@ -23,7 +25,10 @@ public class BlockListener implements Listener {
         if (event.isCancelled())
             return;
 
-        ChunkCache.onBlockDestroy(event.getBlock().getLocation());
+        Location location = event.getBlock().getLocation();
+        // Событие вызываем до записи в кэш, чтобы в нём было состояние блока до поломки
+        Bukkit.getPluginManager().callEvent(new NaturallyBlockBreakEvent(event.getPlayer(), location, ChunkCache.stateOf(location)));
+        ChunkCache.onBlockDestroy(location);
     }
     @EventHandler(priority=EventPriority.MONITOR)
     public void onPistonExtend(BlockPistonExtendEvent event){
