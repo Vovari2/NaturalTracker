@@ -4,22 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bf933ab4-2868-411b-af0d-245c804dd68c" name="Changes" comment="Update version">
+    <list default="true" id="bf933ab4-2868-411b-af0d-245c804dd68c" name="Changes" comment="Переезд на Codex">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AGENTS.md" beforeDir="false" afterPath="$PROJECT_DIR$/AGENTS.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/src/main/java/me/vovari2/naturaltracker/NaturalTrackerAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/me/vovari2/naturaltracker/NaturalTrackerAPI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/me/vovari2/naturaltracker/events/NaturallyBlockBreakEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/me/vovari2/naturaltracker/events/NaturallyBlockBreakEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/me/vovari2/naturaltracker/events/NaturallyBlockPlaceEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/me/vovari2/naturaltracker/events/NaturallyBlockPlaceEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/Database.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/NaturalTrackerAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/NaturalTrackerAPI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/changes/ChunkCache.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/changes/ChunkCache.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/changes/ChunkEntry.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/changes/ChunkEntry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/changes/ChunkSnapshot.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/changes/ChunkSnapshot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/events/NaturallyBlockBreakEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/events/NaturallyBlockBreakEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/events/NaturallyBlockPlaceEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/events/NaturallyBlockPlaceEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/listeners/BlockListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/listeners/BlockListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/listeners/InspectorListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/listeners/InspectorListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/messages/Messages.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/messages/Messages.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,23 +76,23 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.8866634256847612" />
-      <entry key="MS500" value="6.189518621165222" />
-      <entry key="S2" value="14.058101677883924" />
-      <entry key="S5" value="18.553352734790707" />
-      <entry key="S10" value="20.70836005341329" />
-      <entry key="S30" value="23.633838002242502" />
-      <entry key="S60" value="28.108373909155066" />
-      <entry key="M2" value="35.27697937041872" />
-      <entry key="M5" value="44.513938860810036" />
-      <entry key="M10" value="49.17853492995957" />
-      <entry key="M15" value="51.08974311080328" />
-      <entry key="M30" value="55.06387878740649" />
-      <entry key="H1" value="63.49521183827931" />
-      <entry key="H2" value="74.8757866013084" />
-      <entry key="H4" value="84.66422183203457" />
-      <entry key="D1" value="96.21208510591494" />
-      <entry key="W1" value="98.59065617929609" />
+      <entry key="MS100" value="1.0014916704703456" />
+      <entry key="MS500" value="1.3571938010997218" />
+      <entry key="S2" value="3.320264973222071" />
+      <entry key="S5" value="6.855609800352771" />
+      <entry key="S10" value="10.400333980237074" />
+      <entry key="S30" value="14.756699773047574" />
+      <entry key="S60" value="16.26495945680254" />
+      <entry key="M2" value="17.101901689402343" />
+      <entry key="M5" value="17.872014930119782" />
+      <entry key="M10" value="21.41842899459344" />
+      <entry key="M15" value="26.822122866575384" />
+      <entry key="M30" value="40.97929359260014" />
+      <entry key="H1" value="59.042351715228044" />
+      <entry key="H2" value="78.2059046663827" />
+      <entry key="H4" value="93.92072002741062" />
+      <entry key="D1" value="112.48027375267432" />
+      <entry key="W1" value="116.33516799814667" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
@@ -123,23 +114,23 @@
       <entry key="W1" value="0.0" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="1.603018976947013" />
-      <entry key="MS500" value="6.0401160505187725" />
-      <entry key="S2" value="14.000002503918326" />
-      <entry key="S5" value="18.52599128926423" />
-      <entry key="S10" value="20.693716260791604" />
-      <entry key="S30" value="23.628510175142857" />
-      <entry key="S60" value="28.105355565001865" />
-      <entry key="M2" value="35.27518828958949" />
-      <entry key="M5" value="44.51307821495065" />
-      <entry key="M10" value="49.178068274339054" />
-      <entry key="M15" value="51.0894215496829" />
-      <entry key="M30" value="55.06370328194598" />
-      <entry key="H1" value="63.49510587535513" />
-      <entry key="H2" value="74.875721234137" />
-      <entry key="H4" value="84.6641838543788" />
-      <entry key="D1" value="96.21207774148718" />
-      <entry key="W1" value="98.59065509688861" />
+      <entry key="MS100" value="0.9540788646717631" />
+      <entry key="MS500" value="1.3451045734375677" />
+      <entry key="S2" value="3.3135280606333937" />
+      <entry key="S5" value="6.849499051978258" />
+      <entry key="S10" value="10.395078805994372" />
+      <entry key="S30" value="14.753892091908945" />
+      <entry key="S60" value="16.263357884509865" />
+      <entry key="M2" value="17.101044654228726" />
+      <entry key="M5" value="17.87165302366797" />
+      <entry key="M10" value="21.41821366230166" />
+      <entry key="M15" value="26.821945239911656" />
+      <entry key="M30" value="40.979159209466516" />
+      <entry key="H1" value="59.04225262783069" />
+      <entry key="H2" value="78.20583680340634" />
+      <entry key="H4" value="93.92067831928371" />
+      <entry key="D1" value="112.48026524524725" />
+      <entry key="W1" value="116.33516673631844" />
     </decayedShown>
   </component>
   <component name="ProblemsViewState">
@@ -446,7 +437,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Add gradle-wrapper.jar" />
     <MESSAGE value="Changes" />
     <MESSAGE value="Change build.gradle" />
     <MESSAGE value="Version update to 1.21.7" />
@@ -471,7 +461,8 @@
     <MESSAGE value="Added custom event NaturallyBlockBreakEvent" />
     <MESSAGE value="Added custom event NaturallyBlockPlaceEvent" />
     <MESSAGE value="Update version" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update version" />
+    <MESSAGE value="Переезд на Codex" />
+    <option name="LAST_COMMIT_MESSAGE" value="Переезд на Codex" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

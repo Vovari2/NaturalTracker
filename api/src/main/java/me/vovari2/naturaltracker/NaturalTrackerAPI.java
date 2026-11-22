@@ -11,7 +11,8 @@ import org.jetbrains.annotations.Nullable;
  * <p>
  * Все методы вызываются <b>только из главного потока</b>: из других потоков вызов игнорируется
  * и блок считается сгенерированным ({@link #wasGenerated} вернёт {@code true},
- * {@code wasPlaced} и {@code wasDestroyed} — {@code false}, {@code getChangeAge} — {@code null}).
+ * {@code wasPlaced} и {@code wasDestroyed} — {@code false}, {@code getChangeAge} — {@code null},
+ * {@code getIndexChangeAge} — {@code -1}).
  * Ответ берётся из кэша без обращения к БД, поэтому пока данные чанка не подгрузились из БД
  * (первые мгновения после его загрузки), он может быть неточным: блок, который на самом деле поставили
  * или уничтожили, может ещё считаться сгенерированным.
@@ -27,6 +28,18 @@ public interface NaturalTrackerAPI {
      */
     static @Nullable ChangeAge getChangeAge(Location location){
         return ChunkCache.ageOf(location);
+    }
+
+    /**
+     * Индекс давности последнего изменения: 0 — менее минуты, 1 — от 1 до 5 минут,
+     * 2 — от 5 до 20 минут, 3 — 20 минут и более.
+     *
+     * @param location положение блока
+     * @return индекс от 0 до 3; {@code -1}, если {@link #getChangeAge(Location)} возвращает {@code null}
+     */
+    static int getIndexChangeAge(Location location){
+        ChangeAge age = getChangeAge(location);
+        return age == null ? -1 : age.ordinal();
     }
 
     /**
