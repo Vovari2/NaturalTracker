@@ -4,13 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bf933ab4-2868-411b-af0d-245c804dd68c" name="Changes" comment="Переезд на Codex">
+    <list default="true" id="bf933ab4-2868-411b-af0d-245c804dd68c" name="Changes" comment="Окончательные изменения">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AGENTS.md" beforeDir="false" afterPath="$PROJECT_DIR$/AGENTS.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/me/vovari2/naturaltracker/NaturalTrackerAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/me/vovari2/naturaltracker/NaturalTrackerAPI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/NaturalTrackerAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/NaturalTrackerAPI.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,23 +71,23 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0014916704703456" />
-      <entry key="MS500" value="1.3571938010997218" />
-      <entry key="S2" value="3.320264973222071" />
-      <entry key="S5" value="6.855609800352771" />
-      <entry key="S10" value="10.400333980237074" />
-      <entry key="S30" value="14.756699773047574" />
-      <entry key="S60" value="16.26495945680254" />
-      <entry key="M2" value="17.101901689402343" />
-      <entry key="M5" value="17.872014930119782" />
-      <entry key="M10" value="21.41842899459344" />
-      <entry key="M15" value="26.822122866575384" />
-      <entry key="M30" value="40.97929359260014" />
-      <entry key="H1" value="59.042351715228044" />
-      <entry key="H2" value="78.2059046663827" />
-      <entry key="H4" value="93.92072002741062" />
-      <entry key="D1" value="112.48027375267432" />
-      <entry key="W1" value="116.33516799814667" />
+      <entry key="MS100" value="1.111898482494479" />
+      <entry key="MS500" value="1.8176497438875832" />
+      <entry key="S2" value="3.877800326980404" />
+      <entry key="S5" value="5.980070638164433" />
+      <entry key="S10" value="7.236970174501097" />
+      <entry key="S30" value="8.34286846822663" />
+      <entry key="S60" value="8.661751998863025" />
+      <entry key="M2" value="8.828373146374519" />
+      <entry key="M5" value="8.947684361864418" />
+      <entry key="M10" value="9.624815846695418" />
+      <entry key="M15" value="11.611938021259236" />
+      <entry key="M30" value="21.83291822070441" />
+      <entry key="H1" value="42.04943858124974" />
+      <entry key="H2" value="67.5135367665413" />
+      <entry key="H4" value="90.24054494421057" />
+      <entry key="D1" value="118.79399892292388" />
+      <entry key="W1" value="124.93414096390096" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
@@ -114,23 +109,23 @@
       <entry key="W1" value="0.0" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.9540788646717631" />
-      <entry key="MS500" value="1.3451045734375677" />
-      <entry key="S2" value="3.3135280606333937" />
-      <entry key="S5" value="6.849499051978258" />
-      <entry key="S10" value="10.395078805994372" />
-      <entry key="S30" value="14.753892091908945" />
-      <entry key="S60" value="16.263357884509865" />
-      <entry key="M2" value="17.101044654228726" />
-      <entry key="M5" value="17.87165302366797" />
-      <entry key="M10" value="21.41821366230166" />
-      <entry key="M15" value="26.821945239911656" />
-      <entry key="M30" value="40.979159209466516" />
-      <entry key="H1" value="59.04225262783069" />
-      <entry key="H2" value="78.20583680340634" />
-      <entry key="H4" value="93.92067831928371" />
-      <entry key="D1" value="112.48026524524725" />
-      <entry key="W1" value="116.33516673631844" />
+      <entry key="MS100" value="1.0403726570371628" />
+      <entry key="MS500" value="1.7962092343077742" />
+      <entry key="S2" value="3.8662535031137266" />
+      <entry key="S5" value="5.972990485077798" />
+      <entry key="S10" value="7.232706649975031" />
+      <entry key="S30" value="8.341236882653465" />
+      <entry key="S60" value="8.660905998332515" />
+      <entry key="M2" value="8.827942264454878" />
+      <entry key="M5" value="8.947509730434986" />
+      <entry key="M10" value="9.624721745402184" />
+      <entry key="M15" value="11.611862184054614" />
+      <entry key="M30" value="21.832846870077827" />
+      <entry key="H1" value="42.0493684825618" />
+      <entry key="H2" value="67.51347867478056" />
+      <entry key="H4" value="90.24050520872065" />
+      <entry key="D1" value="118.79399000895758" />
+      <entry key="W1" value="124.93413961932059" />
     </decayedShown>
   </component>
   <component name="ProblemsViewState">
@@ -437,7 +432,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Changes" />
     <MESSAGE value="Change build.gradle" />
     <MESSAGE value="Version update to 1.21.7" />
     <MESSAGE value="Updating to new code style" />
@@ -462,7 +456,8 @@
     <MESSAGE value="Added custom event NaturallyBlockPlaceEvent" />
     <MESSAGE value="Update version" />
     <MESSAGE value="Переезд на Codex" />
-    <option name="LAST_COMMIT_MESSAGE" value="Переезд на Codex" />
+    <MESSAGE value="Окончательные изменения" />
+    <option name="LAST_COMMIT_MESSAGE" value="Окончательные изменения" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
