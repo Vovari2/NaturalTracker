@@ -1,6 +1,7 @@
 package me.vovari2.naturaltracker.changes;
 
 import me.vovari2.naturaltracker.Console;
+import me.vovari2.naturaltracker.ChangeAge;
 import me.vovari2.naturaltracker.Database;
 import me.vovari2.naturaltracker.NaturalTracker;
 import me.vovari2.naturaltracker.settings.Settings;
@@ -9,9 +10,9 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,7 @@ public class ChunkCache {
     private final SerialWorker worker;
 
     private BukkitTask autosaveTask;
+    private BukkitTask ageTask;
     public ChunkCache() {
         this.worker = new SerialWorker("natural-tracker-worker", 1_000, t -> Console.error("Не получилось обработать задачу в очереди задач!", t));
     }
@@ -76,6 +78,19 @@ public class ChunkCache {
         ChunkEntry entry = c.map.get(ChunkKey.of(loc));
         return entry == null ? BlockState.GENERATED : entry.state(index);
     }
+    /** Только главный поток. null — нет изменения, данные ещё не загружены или позиция недоступна. */
+    public static @Nullable ChangeAge ageOf(Location loc) {
+        ChunkCache c = IMP;
+        if (c == null || !isPrimaryThread("ageOf")) return null;
+
+        World world = loc.getWorld();
+        if (world == null) return null;
+        int index = ChunkEntry.index(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), world.getMinHeight(), world.getMaxHeight());
+        if (index < 0) return null;
+
+        ChunkEntry entry = c.map.get(ChunkKey.of(loc));
+        return entry == null || !entry.isLoaded() ? null : entry.age(index, System.currentTimeMillis());
+    }
     /** Только главный поток. true, если данные чанка из БД уже подгружены и stateOf() точен. */
     public static boolean changeIsAccurate(Location location) {
         ChunkCache c = IMP;
@@ -111,7 +126,7 @@ public class ChunkCache {
         }
 
         c.worker.execute(() -> {
-            BitSet stored = null;
+            ChunkEntry stored = null;
             try {
                 stored = Database.loadChunk(key);
             } catch (Exception e) {
@@ -123,7 +138,7 @@ public class ChunkCache {
             NaturalTracker plugin = NaturalTracker.getInstance();
             if (!plugin.isEnabled()) return;
 
-            BitSet finalStored = stored;
+            ChunkEntry finalStored = stored;
             Bukkit.getScheduler().runTask(plugin, () -> {
                 // Чанк уже выгрузился, пока шла загрузка
                 if (c.map.get(key) != entry) return;
@@ -157,6 +172,10 @@ public class ChunkCache {
                 c.onChunkLoad(chunk, false);
 
         c.startAutosave();
+        c.ageTask = Bukkit.getScheduler().runTaskTimer(NaturalTracker.getInstance(), () -> {
+            long now = System.currentTimeMillis();
+            c.map.values().forEach(entry -> entry.updateAges(now));
+        }, 20L, 20L);
     }
     public static void reload() {
         ChunkCache c = IMP;
@@ -176,6 +195,8 @@ public class ChunkCache {
         IMP = null;
         if (c.autosaveTask != null)
             c.autosaveTask.cancel();
+        if (c.ageTask != null)
+            c.ageTask.cancel();
 
         c.flushDirty();
         c.worker.close();

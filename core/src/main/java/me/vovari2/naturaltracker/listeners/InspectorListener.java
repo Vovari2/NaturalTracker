@@ -1,6 +1,7 @@
 package me.vovari2.naturaltracker.listeners;
 
 import me.vovari2.naturaltracker.NaturalTracker;
+import me.vovari2.naturaltracker.ChangeAge;
 import me.vovari2.naturaltracker.changes.ChunkCache;
 import me.vovari2.naturaltracker.messages.Messages;
 import org.bukkit.Material;
@@ -43,6 +44,16 @@ public class InspectorListener implements Listener {
             case DESTROYED -> Messages.INSPECT_DESTROYED;
         };
         message.send(event.getPlayer());
+        ChangeAge age = ChunkCache.ageOf(block.getLocation());
+        if (age != null) {
+            Messages ageMessage = switch (age) {
+                case LESS_THAN_MINUTE -> Messages.INSPECT_AGE_LESS_THAN_MINUTE;
+                case ONE_TO_FIVE_MINUTES -> Messages.INSPECT_AGE_ONE_TO_FIVE_MINUTES;
+                case FIVE_TO_TWENTY_MINUTES -> Messages.INSPECT_AGE_FIVE_TO_TWENTY_MINUTES;
+                case TWENTY_MINUTES_OR_MORE -> Messages.INSPECT_AGE_TWENTY_MINUTES_OR_MORE;
+            };
+            ageMessage.send(event.getPlayer());
+        }
         event.setCancelled(true);
     }
 }

@@ -4,12 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bf933ab4-2868-411b-af0d-245c804dd68c" name="Changes" comment="Added custom event NaturallyBlockBreakEvent">
-      <change afterPath="$PROJECT_DIR$/api/src/main/java/me/vovari2/naturaltracker/events/NaturallyBlockPlaceEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/events/NaturallyBlockPlaceEvent.java" afterDir="false" />
+    <list default="true" id="bf933ab4-2868-411b-af0d-245c804dd68c" name="Changes" comment="Update version">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/java/me/vovari2/naturaltracker/NaturalTrackerAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/me/vovari2/naturaltracker/NaturalTrackerAPI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/java/me/vovari2/naturaltracker/events/NaturallyBlockBreakEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/me/vovari2/naturaltracker/events/NaturallyBlockBreakEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/java/me/vovari2/naturaltracker/events/NaturallyBlockPlaceEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/me/vovari2/naturaltracker/events/NaturallyBlockPlaceEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/Database.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/NaturalTrackerAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/NaturalTrackerAPI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/changes/ChunkCache.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/changes/ChunkCache.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/changes/ChunkEntry.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/changes/ChunkEntry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/changes/ChunkSnapshot.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/changes/ChunkSnapshot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/events/NaturallyBlockBreakEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/events/NaturallyBlockBreakEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/events/NaturallyBlockPlaceEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/events/NaturallyBlockPlaceEvent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/listeners/BlockListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/listeners/BlockListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/listeners/InspectorListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/listeners/InspectorListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/messages/Messages.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/messages/Messages.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,29 +76,32 @@
     &quot;accountId&quot;: &quot;f6b60572-8ecf-48d0-a7f1-a4455a5b04cd&quot;
   }
 }</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="jar://$USER_HOME$/.jdks/ms-21.0.12.1/lib/src.zip!/java.base/java/lang/Object.java" root0="SKIP_INSPECTION" />
+  </component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.6300398826529299" />
-      <entry key="MS500" value="5.702095381473724" />
-      <entry key="S2" value="12.958078743715062" />
-      <entry key="S5" value="17.031507414240224" />
-      <entry key="S10" value="18.97569607597745" />
-      <entry key="S30" value="21.736017289408363" />
-      <entry key="S60" value="26.169702683797457" />
-      <entry key="M2" value="33.3158707975147" />
-      <entry key="M5" value="42.53373804412177" />
-      <entry key="M10" value="47.18950586217779" />
-      <entry key="M15" value="49.09734972298739" />
-      <entry key="M30" value="53.06798650178212" />
-      <entry key="H1" value="61.4975887140129" />
-      <entry key="H2" value="72.87719305681311" />
-      <entry key="H4" value="82.66501881938639" />
-      <entry key="D1" value="94.2122363726117" />
-      <entry key="W1" value="96.59067833128837" />
+      <entry key="MS100" value="1.8866634256847612" />
+      <entry key="MS500" value="6.189518621165222" />
+      <entry key="S2" value="14.058101677883924" />
+      <entry key="S5" value="18.553352734790707" />
+      <entry key="S10" value="20.70836005341329" />
+      <entry key="S30" value="23.633838002242502" />
+      <entry key="S60" value="28.108373909155066" />
+      <entry key="M2" value="35.27697937041872" />
+      <entry key="M5" value="44.513938860810036" />
+      <entry key="M10" value="49.17853492995957" />
+      <entry key="M15" value="51.08974311080328" />
+      <entry key="M30" value="55.06387878740649" />
+      <entry key="H1" value="63.49521183827931" />
+      <entry key="H2" value="74.8757866013084" />
+      <entry key="H4" value="84.66422183203457" />
+      <entry key="D1" value="96.21208510591494" />
+      <entry key="W1" value="98.59065617929609" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
@@ -110,23 +123,23 @@
       <entry key="W1" value="0.0" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="1.5572324720211843" />
-      <entry key="MS500" value="5.652174572023006" />
-      <entry key="S2" value="12.930455306633405" />
-      <entry key="S5" value="17.017070906318477" />
-      <entry key="S10" value="18.967667799908313" />
-      <entry key="S30" value="21.73293208001996" />
-      <entry key="S60" value="26.16781025519556" />
-      <entry key="M2" value="33.31464390739122" />
-      <entry key="M5" value="42.53310345940898" />
-      <entry key="M10" value="47.18915232052104" />
-      <entry key="M15" value="49.097103591814154" />
-      <entry key="M30" value="53.067848721687014" />
-      <entry key="H1" value="61.497501616235674" />
-      <entry key="H2" value="72.87713712294281" />
-      <entry key="H4" value="82.66498555863102" />
-      <entry key="D1" value="94.21222979438113" />
-      <entry key="W1" value="96.59067736119617" />
+      <entry key="MS100" value="1.603018976947013" />
+      <entry key="MS500" value="6.0401160505187725" />
+      <entry key="S2" value="14.000002503918326" />
+      <entry key="S5" value="18.52599128926423" />
+      <entry key="S10" value="20.693716260791604" />
+      <entry key="S30" value="23.628510175142857" />
+      <entry key="S60" value="28.105355565001865" />
+      <entry key="M2" value="35.27518828958949" />
+      <entry key="M5" value="44.51307821495065" />
+      <entry key="M10" value="49.178068274339054" />
+      <entry key="M15" value="51.0894215496829" />
+      <entry key="M30" value="55.06370328194598" />
+      <entry key="H1" value="63.49510587535513" />
+      <entry key="H2" value="74.875721234137" />
+      <entry key="H4" value="84.6641838543788" />
+      <entry key="D1" value="96.21207774148718" />
+      <entry key="W1" value="98.59065509688861" />
     </decayedShown>
   </component>
   <component name="ProblemsViewState">
@@ -143,36 +156,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Gradle.Build NaturalTracker.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.NaturalTracker [:api:shadowJar].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.NaturalTracker [:core:shadowJar].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.NaturalTracker [compileJava].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.NaturalTracker [core:shadowJar].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.NaturalTracker [shadowJar].executor&quot;: &quot;Run&quot;,
-    &quot;Remote JVM Debug.Paper Remote Debug.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/Minecraft/Plugins/NaturalTracker&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.jshint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.jshint&quot;: &quot;&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.24025974&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.Build NaturalTracker.executor": "Run",
+    "Gradle.NaturalTracker [:api:shadowJar].executor": "Run",
+    "Gradle.NaturalTracker [:core:shadowJar].executor": "Run",
+    "Gradle.NaturalTracker [compileJava].executor": "Run",
+    "Gradle.NaturalTracker [core:shadowJar].executor": "Run",
+    "Gradle.NaturalTracker [shadowJar].executor": "Run",
+    "Remote JVM Debug.Paper Remote Debug.executor": "Debug",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/Minecraft/Plugins/NaturalTracker",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.jshint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.jshint": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.24025974",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\Minecraft\Plugins\NaturalTracker\core\src\main\java\me\vovari2\naturaltracker" />
@@ -415,6 +428,12 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnknownFeatures">
+    <option featureType="dependencySupport" implementationName="executable:docker" />
+    <option featureType="dependencySupport" implementationName="java:net.kyori:adventure-api" />
+    <option featureType="dependencySupport" implementationName="executable:kubectl" />
+    <option featureType="dependencySupport" implementationName="java:io.papermc.paper:paper-api" />
+  </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
@@ -427,8 +446,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Rename project" />
-    <MESSAGE value="Rename project 2" />
     <MESSAGE value="Add gradle-wrapper.jar" />
     <MESSAGE value="Changes" />
     <MESSAGE value="Change build.gradle" />
@@ -452,7 +469,9 @@
     <MESSAGE value="Add README.md" />
     <MESSAGE value="Update README.md" />
     <MESSAGE value="Added custom event NaturallyBlockBreakEvent" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added custom event NaturallyBlockBreakEvent" />
+    <MESSAGE value="Added custom event NaturallyBlockPlaceEvent" />
+    <MESSAGE value="Update version" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update version" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

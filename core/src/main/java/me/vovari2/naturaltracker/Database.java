@@ -16,7 +16,6 @@ import org.jetbrains.annotations.Nullable;
 import java.sql.*;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.util.BitSet;
 import java.util.List;
 import java.util.zip.DataFormatException;
 
@@ -109,7 +108,7 @@ public class Database {
     }
 
     /** Только из потока воркера. null — в БД чанка нет (или БД недоступна). */
-    public static @Nullable BitSet loadChunk(ChunkKey key) throws SQLException, DataFormatException {
+    public static @Nullable ChunkEntry loadChunk(ChunkKey key) throws SQLException, DataFormatException {
         if (DATA_SOURCE == null) return null;
 
         try (Connection conn = DATA_SOURCE.getConnection()) {
@@ -152,7 +151,9 @@ public class Database {
         if (snapshot.merge()) {
             byte[] old = selectChunk(conn, key);
             if (old != null) {
-                raw = ChunkEntry.overlay(BitSet.valueOf(raw), ChunkEntry.decode(old)).toByteArray();
+                ChunkEntry entry = ChunkEntry.fromBytes(raw);
+                entry.merge(ChunkEntry.decode(old));
+                raw = entry.toBytes();
             }
         }
 

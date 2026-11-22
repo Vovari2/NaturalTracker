@@ -3,18 +3,32 @@ package me.vovari2.naturaltracker;
 import me.vovari2.naturaltracker.changes.BlockState;
 import me.vovari2.naturaltracker.changes.ChunkCache;
 import org.bukkit.Location;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * API для других плагинов: показывает, что в последний раз происходило с блоком — он создан миром,
  * его поставили или его уничтожили. Для каждого блока верно ровно одно из трёх состояний.
  * <p>
  * Все методы вызываются <b>только из главного потока</b>: из других потоков вызов игнорируется
- * и блок считается сгенерированным ({@link #wasGenerated} вернёт {@code true}, остальные методы — {@code false}).
+ * и блок считается сгенерированным ({@link #wasGenerated} вернёт {@code true},
+ * {@code wasPlaced} и {@code wasDestroyed} — {@code false}, {@code getChangeAge} — {@code null}).
  * Ответ берётся из кэша без обращения к БД, поэтому пока данные чанка не подгрузились из БД
  * (первые мгновения после его загрузки), он может быть неточным: блок, который на самом деле поставили
  * или уничтожили, может ещё считаться сгенерированным.
  */
 public interface NaturalTrackerAPI {
+    /**
+     * Давность последнего отслеживаемого изменения позиции, включая установку, разрушение и поршни.
+     * Время при выгруженном чанке и выключенном сервере учитывается.
+     *
+     * @param location положение блока
+     * @return категория давности; {@code null}, если изменений нет, данные ещё не загружены,
+     * позиция недоступна или вызов сделан вне главного потока
+     */
+    static @Nullable ChangeAge getChangeAge(Location location){
+        return ChunkCache.ageOf(location);
+    }
+
     /**
      * Проверяет, что блок создан миром и с ним ничего не делали ни игроки, ни механизмы.
      *

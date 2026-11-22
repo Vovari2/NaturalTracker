@@ -22,7 +22,7 @@ public class BlockListener implements Listener {
 
         Location location = event.getBlock().getLocation();
         // Событие вызываем до записи в кэш, чтобы в нём было состояние блока до установки
-        Bukkit.getPluginManager().callEvent(new NaturallyBlockPlaceEvent(event.getPlayer(), location, ChunkCache.stateOf(location)));
+        Bukkit.getPluginManager().callEvent(new NaturallyBlockPlaceEvent(event.getPlayer(), location, ChunkCache.stateOf(location), ChunkCache.ageOf(location)));
         ChunkCache.onBlockPlace(event.getBlock().getLocation());
     }
     @EventHandler(priority=EventPriority.MONITOR)
@@ -32,7 +32,7 @@ public class BlockListener implements Listener {
 
         Location location = event.getBlock().getLocation();
         // Событие вызываем до записи в кэш, чтобы в нём было состояние блока до поломки
-        Bukkit.getPluginManager().callEvent(new NaturallyBlockBreakEvent(event.getPlayer(), location, ChunkCache.stateOf(location)));
+        Bukkit.getPluginManager().callEvent(new NaturallyBlockBreakEvent(event.getPlayer(), location, ChunkCache.stateOf(location), ChunkCache.ageOf(location)));
         ChunkCache.onBlockDestroy(location);
     }
     @EventHandler(priority=EventPriority.MONITOR)
