@@ -4,8 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bf933ab4-2868-411b-af0d-245c804dd68c" name="Changes" comment="Окончательные изменения">
+    <list default="true" id="bf933ab4-2868-411b-af0d-245c804dd68c" name="Changes" comment="Warning fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AGENTS.md" beforeDir="false" afterPath="$PROJECT_DIR$/AGENTS.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/java/me/vovari2/naturaltracker/events/NaturallyBlockBreakEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/me/vovari2/naturaltracker/events/NaturallyBlockBreakEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/java/me/vovari2/naturaltracker/events/NaturallyBlockPlaceEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/me/vovari2/naturaltracker/events/NaturallyBlockPlaceEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/events/NaturallyBlockBreakEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/events/NaturallyBlockBreakEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/events/NaturallyBlockPlaceEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/events/NaturallyBlockPlaceEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/messages/Messages.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/messages/Messages.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/utils/FileUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/java/me/vovari2/naturaltracker/utils/FileUtils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,23 +79,23 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.111898482494479" />
-      <entry key="MS500" value="1.8176497438875832" />
-      <entry key="S2" value="3.877800326980404" />
-      <entry key="S5" value="5.980070638164433" />
-      <entry key="S10" value="7.236970174501097" />
-      <entry key="S30" value="8.34286846822663" />
-      <entry key="S60" value="8.661751998863025" />
-      <entry key="M2" value="8.828373146374519" />
-      <entry key="M5" value="8.947684361864418" />
-      <entry key="M10" value="9.624815846695418" />
-      <entry key="M15" value="11.611938021259236" />
-      <entry key="M30" value="21.83291822070441" />
-      <entry key="H1" value="42.04943858124974" />
-      <entry key="H2" value="67.5135367665413" />
-      <entry key="H4" value="90.24054494421057" />
-      <entry key="D1" value="118.79399892292388" />
-      <entry key="W1" value="124.93414096390096" />
+      <entry key="MS100" value="1.0522316937020584" />
+      <entry key="MS500" value="1.7615289600329165" />
+      <entry key="S2" value="3.2892359245260008" />
+      <entry key="S5" value="4.152857183891248" />
+      <entry key="S10" value="4.54221707188959" />
+      <entry key="S30" value="4.8391240492582295" />
+      <entry key="S60" value="4.953996154384445" />
+      <entry key="M2" value="5.525000579178572" />
+      <entry key="M5" value="7.965531697006064" />
+      <entry key="M10" value="10.548136963642675" />
+      <entry key="M15" value="13.045283751513182" />
+      <entry key="M30" value="23.176612854483714" />
+      <entry key="H1" value="43.36879095805976" />
+      <entry key="H2" value="69.49157392738107" />
+      <entry key="H4" value="93.19792980844785" />
+      <entry key="D1" value="123.34157759910859" />
+      <entry key="W1" value="129.86605795821686" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
@@ -109,23 +117,23 @@
       <entry key="W1" value="0.0" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="1.0403726570371628" />
-      <entry key="MS500" value="1.7962092343077742" />
-      <entry key="S2" value="3.8662535031137266" />
-      <entry key="S5" value="5.972990485077798" />
-      <entry key="S10" value="7.232706649975031" />
-      <entry key="S30" value="8.341236882653465" />
-      <entry key="S60" value="8.660905998332515" />
-      <entry key="M2" value="8.827942264454878" />
-      <entry key="M5" value="8.947509730434986" />
-      <entry key="M10" value="9.624721745402184" />
-      <entry key="M15" value="11.611862184054614" />
-      <entry key="M30" value="21.832846870077827" />
-      <entry key="H1" value="42.0493684825618" />
-      <entry key="H2" value="67.51347867478056" />
-      <entry key="H4" value="90.24050520872065" />
-      <entry key="D1" value="118.79399000895758" />
-      <entry key="W1" value="124.93413961932059" />
+      <entry key="MS100" value="1.0156942159112834" />
+      <entry key="MS500" value="1.74691672422742" />
+      <entry key="S2" value="3.2797096236815855" />
+      <entry key="S5" value="4.14734190570531" />
+      <entry key="S10" value="4.539046685926057" />
+      <entry key="S30" value="4.837959150411345" />
+      <entry key="S60" value="4.953395567873661" />
+      <entry key="M2" value="5.524670635015646" />
+      <entry key="M5" value="7.965351655823442" />
+      <entry key="M10" value="10.548021565038532" />
+      <entry key="M15" value="13.045190421843689" />
+      <entry key="M30" value="23.176533051560348" />
+      <entry key="H1" value="43.368716792529256" />
+      <entry key="H2" value="69.49151333400101" />
+      <entry key="H4" value="93.19788842132905" />
+      <entry key="D1" value="123.34156829389939" />
+      <entry key="W1" value="129.8660565536272" />
     </decayedShown>
   </component>
   <component name="ProblemsViewState">
@@ -148,6 +156,7 @@
     "Gradle.NaturalTracker [:api:shadowJar].executor": "Run",
     "Gradle.NaturalTracker [:core:shadowJar].executor": "Run",
     "Gradle.NaturalTracker [compileJava].executor": "Run",
+    "Gradle.NaturalTracker [core:runServer].executor": "Run",
     "Gradle.NaturalTracker [core:shadowJar].executor": "Run",
     "Gradle.NaturalTracker [shadowJar].executor": "Run",
     "Remote JVM Debug.Paper Remote Debug.executor": "Debug",
@@ -210,6 +219,31 @@
       <GradleCoverageDisabled>false</GradleCoverageDisabled>
       <method v="2" />
     </configuration>
+    <configuration name="NaturalTracker [core:runServer]" type="GradleRunConfiguration" factoryName="Gradle" nameIsGenerated="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="core:runServer" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <ExternalSystemDebugDisabled>false</ExternalSystemDebugDisabled>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <GradleProfilingDisabled>false</GradleProfilingDisabled>
+      <GradleCoverageDisabled>false</GradleCoverageDisabled>
+      <method v="2" />
+    </configuration>
     <configuration name="NaturalTracker [core:shadowJar]" type="GradleRunConfiguration" factoryName="Gradle" nameIsGenerated="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -252,6 +286,7 @@
     <list>
       <item itemvalue="Gradle.NaturalTracker [compileJava]" />
       <item itemvalue="Gradle.NaturalTracker [core:shadowJar]" />
+      <item itemvalue="Gradle.NaturalTracker [core:runServer]" />
       <item itemvalue="Remote JVM Debug.Paper Remote Debug" />
     </list>
   </component>
@@ -438,7 +473,6 @@
     <MESSAGE value="Version update" />
     <MESSAGE value="Update to version 1.21.10" />
     <MESSAGE value="Optimization" />
-    <MESSAGE value="Warning fix" />
     <MESSAGE value="Optimize database" />
     <MESSAGE value="Added commands" />
     <MESSAGE value="Bug fix" />
@@ -457,7 +491,8 @@
     <MESSAGE value="Update version" />
     <MESSAGE value="Переезд на Codex" />
     <MESSAGE value="Окончательные изменения" />
-    <option name="LAST_COMMIT_MESSAGE" value="Окончательные изменения" />
+    <MESSAGE value="Warning fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="Warning fix" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

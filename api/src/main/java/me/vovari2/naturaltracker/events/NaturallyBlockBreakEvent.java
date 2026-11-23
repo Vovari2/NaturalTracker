@@ -36,6 +36,8 @@ public class NaturallyBlockBreakEvent extends Event {
 
     /** Давность предыдущего изменения до поломки; null — сведений нет или использован прежний конструктор. */
     public @Nullable ChangeAge getChangeAge() { return changeAge; }
+    /** Индекс давности от 0 до 3; -1, если давность неизвестна. */
+    public int getIndexChangeAge() { return changeAge == null ? -1 : changeAge.ordinal(); }
 
     /** Блок был создан миром и до поломки с ним ничего не делали. */
     public boolean wasGenerated() { return state == BlockState.GENERATED; }
